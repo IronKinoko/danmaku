@@ -1,6 +1,6 @@
 {
   "name": "@ironkinoko/danmaku",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "description": "Display danmaku (flying comments) on HTML5 video.",
   "main": "dist/danmaku.js",
   "module": "dist/esm/danmaku.js",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/weizhenye/Danmaku.git"
+    "url": "git+https://github.com/IronKinoko/danmaku.git"
   },
   "keywords": [
     "danmaku",
@@ -35,12 +35,11 @@
     "audio",
     "live"
   ],
-  "author": "Zhenye Wei",
+  "author": "IroKinoko<kinoko_main@outlook.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/weizhenye/Danmaku/issues"
+    "url": "https://github.com/IronKinoko/danmaku/issues"
   },
-  "homepage": "https://danmaku.js.org/",
   "devDependencies": {
     "@rollup/plugin-replace": "^2.3.3",
     "chai": "^4.2.0",

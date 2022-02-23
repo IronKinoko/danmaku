@@ -1,20 +1,6 @@
 # Danmaku
 
-[![GitHub Action](https://github.com/weizhenye/Danmaku/workflows/CI/badge.svg)](https://github.com/weizhenye/Danmaku/actions)
-[![Coverage](https://badgen.net/codecov/c/github/weizhenye/Danmaku?icon=codecov)](https://codecov.io/gh/weizhenye/Danmaku)
-[![Dependencies](https://badgen.net/david/dep/weizhenye/Danmaku?icon=https://api.iconify.design/si-glyph:connect-2.svg?color=white)](https://david-dm.org/weizhenye/Danmaku)
-[![NPM version](https://badgen.net/npm/v/danmaku?icon=npm)](https://www.npmjs.com/package/danmaku)
-[![License](https://badgen.net/npm/license/danmaku?icon=https://api.iconify.design/octicon:law.svg?color=white)](https://github.com/weizhenye/Danmaku/blob/master/LICENSE)
-[![File size](https://badgen.net/bundlephobia/minzip/danmaku?icon=https://api.iconify.design/ant-design:file-zip-outline.svg?color=white)](https://bundlephobia.com/result?p=danmaku)
-[![jsDelivr](https://badgen.net/jsdelivr/hits/npm/danmaku?icon=https://api.iconify.design/simple-icons:jsdelivr.svg?color=white)](https://www.jsdelivr.com/package/npm/danmaku)
-
-[![Browser compatibility](https://saucelabs.com/browser-matrix/danmaku.svg)](https://saucelabs.com/u/danmaku)
-
 Danmaku is a JavaScript library to display flying comments on HTML media elements (video and audio). It can also display comments to your container in real time without timeline.
-
-[Demo](https://danmaku.js.org/)
-
-[中文文档](https://github.com/weizhenye/Danmaku/wiki/%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3)
 
 ## Installation
 
@@ -276,4 +262,4 @@ danmaku.destroy()
 
 ## Thanks
 
-[Zhenye Wei](https://github.com/weizhenye)
+fork from [Zhenye Wei](https://github.com/weizhenye)
