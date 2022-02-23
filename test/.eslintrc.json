@@ -1,0 +1,14 @@
+{
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "Promise": true,
+    "assert": true,
+    "expect": true,
+    "should": true
+  },
+  "rules": {
+    "no-console": 0
+  }
+}
