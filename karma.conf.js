@@ -1,30 +1,28 @@
-const replace = require('@rollup/plugin-replace');
-const istanbul = require('rollup-plugin-istanbul');
+const replace = require('@rollup/plugin-replace')
+const istanbul = require('rollup-plugin-istanbul')
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     singleRun: true,
     frameworks: ['mocha', 'chai'],
     browsers: ['ChromeHeadless'],
-    files: [
-      'test/test.js'
-    ],
+    files: ['test/test.js'],
     preprocessors: {
-      'test/test.js': ['rollup']
+      'test/test.js': ['rollup'],
     },
     rollupPreprocessor: {
       output: {
         format: 'iife',
       },
       plugins: [
-        replace({ 'process.env.ENGINE': '""' }),
-        istanbul({ exclude: ['test/**/*.js'] })
-      ]
+        replace({ 'process.env.ENGINE': '""', preventAssignment: true }),
+        istanbul({ exclude: ['test/**/*.js'] }),
+      ],
     },
     reporters: ['progress', 'coverage'],
     coverageReporter: {
       type: 'lcov',
-      subdir: '.'
-    }
-  });
-};
+      subdir: '.',
+    },
+  })
+}

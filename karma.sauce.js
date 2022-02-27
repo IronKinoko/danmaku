@@ -1,5 +1,5 @@
-const replace = require('@rollup/plugin-replace');
-const istanbul = require('rollup-plugin-istanbul');
+const replace = require('@rollup/plugin-replace')
+const istanbul = require('rollup-plugin-istanbul')
 
 // https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
 const customLaunchers = {
@@ -65,9 +65,9 @@ const customLaunchers = {
     platform: 'Windows 7',
     version: '9',
   },
-};
+}
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     singleRun: true,
     concurrency: 5,
@@ -78,24 +78,24 @@ module.exports = function(config) {
     customLaunchers,
     files: [
       'node_modules/es6-promise/dist/es6-promise.auto.min.js',
-      'test/test.js'
+      'test/test.js',
     ],
     preprocessors: {
-      'test/test.js': ['rollup']
+      'test/test.js': ['rollup'],
     },
     rollupPreprocessor: {
       output: {
         format: 'iife',
       },
       plugins: [
-        replace({ 'process.env.ENGINE': '""' }),
-        istanbul({ exclude: ['test/**/*.js'] })
-      ]
+        replace({ 'process.env.ENGINE': '""', preventAssignment: true }),
+        istanbul({ exclude: ['test/**/*.js'] }),
+      ],
     },
     reporters: ['dots', 'saucelabs'],
     sauceLabs: {
       testName: 'Danmaku test',
-      recordScreenshots: false
+      recordScreenshots: false,
     },
-  });
-};
+  })
+}

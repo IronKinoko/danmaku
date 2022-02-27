@@ -1,7 +1,7 @@
 import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 
-export default ['', 'dom', 'canvas'].map((engine) => {
+const configs = ['', 'dom', 'canvas'].map((engine) => {
   const files = ['', 'min'].map((env) =>
     ['danmaku', engine, env, 'js'].filter((x) => x).join('.')
   )
@@ -21,6 +21,10 @@ export default ['', 'dom', 'canvas'].map((engine) => {
         }))
       )
     ),
-    plugins: [replace({ 'process.env.ENGINE': `"${engine}"` })],
+    plugins: [
+      replace({ preventAssignment: true, 'process.env.ENGINE': `"${engine}"` }),
+    ],
   }
 })
+
+export default configs
