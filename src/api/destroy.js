@@ -1,23 +1,23 @@
-import { unbindEvents } from '../internal/events.js';
-import pause from '../internal/pause.js';
+import { unbindEvents } from '../internal/events.js'
+import pause from '../internal/pause.js'
 
 /* eslint-disable no-invalid-this */
-export default function() {
+export default function () {
   if (!this.container) {
-    return this;
+    return this
   }
 
-  pause.call(this);
-  this.clear();
-  this.container.removeChild(this._.stage);
+  pause.call(this)
+  this.clear()
+  this.container.removeChild(this._.stage)
   if (this.media) {
-    unbindEvents.call(this, this._.listener);
+    unbindEvents.call(this, this._.listener)
   }
   for (var key in this) {
     /* istanbul ignore else  */
     if (Object.prototype.hasOwnProperty.call(this, key)) {
-      this[key] = null;
+      this[key] = null
     }
   }
-  return this;
+  return this
 }

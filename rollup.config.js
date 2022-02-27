@@ -1,26 +1,26 @@
-import replace from '@rollup/plugin-replace';
-import { terser } from 'rollup-plugin-terser';
+import replace from '@rollup/plugin-replace'
+import { terser } from 'rollup-plugin-terser'
 
 export default ['', 'dom', 'canvas'].map((engine) => {
-  const files = ['', 'min'].map((env) => (
+  const files = ['', 'min'].map((env) =>
     ['danmaku', engine, env, 'js'].filter((x) => x).join('.')
-  ));
+  )
   const formats = [
     { format: 'umd', path: '' },
     { format: 'esm', path: 'esm' },
-  ];
+  ]
   return {
     input: 'src/index.js',
     output: [].concat(
-      ...formats.map(({ format, path }) => files.map((file) => ({
-        file: ['dist', path, file].filter((x) => x).join('/'),
-        format,
-        name: 'Danmaku',
-        plugins: file.includes('.min') ? [terser()] : [],
-      })))
+      ...formats.map(({ format, path }) =>
+        files.map((file) => ({
+          file: ['dist', path, file].filter((x) => x).join('/'),
+          format,
+          name: 'Danmaku',
+          plugins: file.includes('.min') ? [terser()] : [],
+        }))
+      )
     ),
-    plugins: [
-      replace({ 'process.env.ENGINE': `"${engine}"` }),
-    ],
-  };
-});
+    plugins: [replace({ 'process.env.ENGINE': `"${engine}"` })],
+  }
+})

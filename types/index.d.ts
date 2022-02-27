@@ -63,6 +63,11 @@ declare class Danmaku {
    * Do it when you resize container.
    */
   resize(): Danmaku
+
+  reload(comments: Comment[]): Danmaku
+  comments: Comment[]
+  engine: 'dom' | 'canvas'
+  media?: HTMLMediaElement
 }
 
 export default Danmaku
