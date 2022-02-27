@@ -1,4 +1,4 @@
-import { formatMode } from "../utils"
+import { formatMode } from '../utils'
 
 /* eslint-disable no-invalid-this */
 export default function (comments) {
