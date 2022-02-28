@@ -1,21 +1,4 @@
-var transform = (function () {
-  var properties = [
-    'oTransform', // Opera 11.5
-    'msTransform', // IE 9
-    'mozTransform',
-    'webkitTransform',
-    'transform',
-  ]
-  var style = document.createElement('div').style
-  for (var i = 0; i < properties.length; i++) {
-    /* istanbul ignore else */
-    if (properties[i] in style) {
-      return properties[i]
-    }
-  }
-  /* istanbul ignore next */
-  return 'transform'
-})()
+import { raf } from '../utils'
 
 export function createCommentNode(cmt) {
   var node = document.createElement('div')
@@ -26,6 +9,11 @@ export function createCommentNode(cmt) {
       node.appendChild($el)
       return node
     }
+  }
+  if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+    node.style.left = '50%'
+    node.style.transform = 'translateX(-50%)'
+    node.style.willChange = 'transform, opacity'
   }
   node.textContent = cmt.text
   if (cmt.style) {
@@ -79,10 +67,22 @@ export function setup(stage, comments) {
   }
 }
 
-export function render(stage, cmt) {
-  cmt.node.style[transform] = 'translate(' + cmt.x + 'px,' + cmt.y + 'px)'
-}
+export function render({ stage, cmt, pbr, duration, currentTime }) {
+  if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+    const start = cmt.mode === 'rtl' ? stage.width : 0 - cmt.width
+    const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
+    cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
 
+    raf(() => {
+      cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
+      cmt.node.style.transition = `transform ${
+        (duration - (currentTime - cmt.time)) / pbr
+      }s linear`
+    })
+  } else {
+    cmt.node.style.top = cmt.y + 'px'
+  }
+}
 /* eslint no-invalid-this: 0 */
 export function remove(stage, cmt) {
   stage.removeChild(cmt.node)
@@ -90,6 +90,31 @@ export function remove(stage, cmt) {
   if (!this.media) {
     cmt.node = null
   }
+}
+
+export function pause(comments) {
+  comments.forEach((cmt) => {
+    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      const { x } = cmt.node.getBoundingClientRect()
+      cmt.node.style.transition = ''
+      cmt.node.style.transform = `translateX(${x}px) translateY(${cmt.y}px) translateZ(0)`
+    }
+  })
+}
+
+export function play({ stage, comments, pbr, duration, currentTime }) {
+  comments.forEach((cmt) => {
+    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
+
+      raf(() => {
+        cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
+        cmt.node.style.transition = `transform ${
+          (duration - (currentTime - cmt.time)) / pbr
+        }s linear`
+      })
+    }
+  })
 }
 
 export default {
@@ -101,4 +126,6 @@ export default {
   setup: setup,
   render: render,
   remove: remove,
+  pause: pause,
+  play: play,
 }
