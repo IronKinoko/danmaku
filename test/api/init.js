@@ -80,15 +80,6 @@ describe('Initialization', function () {
     assert.equal('DIV', danmaku._.stage.tagName)
   })
 
-  it('should support canvas engine', function () {
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      engine: 'canvas',
-    })
-    assert.equal('canvas', danmaku.engine)
-    assert.equal('CANVAS', danmaku._.stage.tagName)
-  })
-
   it('should support speed', function () {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),

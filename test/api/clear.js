@@ -22,20 +22,4 @@ describe('clear API', function () {
       done()
     }, 100)
   })
-
-  it('should clear current stage (canvas engine)', function (done) {
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      engine: 'canvas',
-    })
-
-    danmaku.emit({ text: '勝ったな！ガハハ！' })
-    setTimeout(function () {
-      assert.equal(1, danmaku._.runningList.length)
-      assert.equal('CANVAS', danmaku._.runningList[0].canvas.tagName)
-      danmaku.clear()
-      assert.equal(0, danmaku._.runningList.length)
-      done()
-    }, 100)
-  })
 })

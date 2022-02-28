@@ -119,42 +119,6 @@ describe('Danmaku behavior', function () {
     })
   })
 
-  it('should not collide with same comment mode', function (done) {
-    skipAfter.apply(this, [6e4, done])
-
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      engine: 'canvas',
-    })
-
-    danmaku.emit({ text: 'ltr 1', mode: 'ltr' })
-    danmaku.emit({ text: 'ltr 2 loooooooooooooooooooooooong', mode: 'ltr' })
-    danmaku.emit({ text: 'top 1', mode: 'top' })
-
-    var rl = danmaku._.runningList
-    var iv = setInterval(function () {
-      if (rl.length === 7) {
-        clearInterval(iv)
-        assert.equal(rl[0].height, rl[1].y)
-        assert.equal(rl[2].height, rl[3].y)
-        assert.equal(
-          danmaku._.stage.height - rl[4].height - rl[5].height,
-          rl[5].y
-        )
-        assert.equal(true, rl[6].y > rl[0].y)
-        done()
-      }
-      if (rl.length === 4) {
-        danmaku.emit({ text: 'bottom 1', mode: 'bottom' })
-        danmaku.emit({ text: 'bottom 2', mode: 'bottom' })
-        danmaku.emit({ text: 'this is a long text', mode: 'ltr' })
-      }
-      if (rl.length === 3) {
-        danmaku.emit({ text: 'top 2', mode: 'top' })
-      }
-    }, 100)
-  })
-
   it('should remove comments which is out of stage (DOM)', function (done) {
     danmaku = new Danmaku({
       container: document.getElementById('test-container'),
@@ -169,34 +133,10 @@ describe('Danmaku behavior', function () {
     }, 500)
   })
 
-  it('should remove comments which is out of stage (canvas)', function (done) {
-    danmaku = new Danmaku({
-      container: document.getElementById('test-container'),
-      engine: 'canvas',
-    })
-
-    danmaku.speed = 12800
-    danmaku.emit({ text: 'rtl', mode: 'rtl' })
-    setTimeout(function () {
-      assert.equal(0, danmaku._.runningList.length)
-      done()
-    }, 500)
-  })
-
   it('should sync timeline with media (DOM engine)', function (done) {
     skipAfter.apply(this, [6e4, done])
 
     syncTimeline('dom', done).then(function (d) {
-      if (d) {
-        danmaku = d
-      }
-    })
-  })
-
-  it('should sync timeline with media (canvas engine)', function (done) {
-    skipAfter.apply(this, [6e4, done])
-
-    syncTimeline('canvas', done).then(function (d) {
       if (d) {
         danmaku = d
       }
