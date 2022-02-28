@@ -20,9 +20,9 @@
     "bundle": "rollup -c",
     "build": "npm run bundle",
     "prettier": "prettier -c -w {src,test,types}/**/*",
-    "preversion": "npm test && npm run prettier",
+    "preversion": "npm test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags && npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -42,6 +42,8 @@
     "url": "https://github.com/IronKinoko/danmaku/issues"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-replace": "^2.3.3",
     "chai": "^4.2.0",

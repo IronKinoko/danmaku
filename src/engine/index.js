@@ -53,6 +53,9 @@ export default function (framing, setup, render, remove) {
       var elapsed = (totalWidth * (dn - cmt._utc) * pbr) / this._.duration
       if (cmt.mode === 'ltr') cmt.x = (elapsed - cmt.width + 0.5) | 0
       if (cmt.mode === 'rtl') cmt.x = (this._.stage.width - elapsed + 0.5) | 0
+      if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+        cmt.x = (this._.stage.width - cmt.width) >> 1
+      }
       render(this._.stage, cmt)
     }
   }

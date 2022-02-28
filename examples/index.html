@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      body {
+        background: #d2d2d2;
+        margin: 0;
+      }
+      .resize {
+        width: 800px;
+        height: 600px;
+        resize: both;
+        border: 1px solid #999;
+        overflow: auto;
+        position: relative;
+        padding: 8px;
+      }
+      video {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .danmaku-container {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="resize">
+      <video
+        controls
+        src="https://media.w3.org/2010/05/video/movie_300.mp4"
+      ></video>
+      <div class="danmaku-container"></div>
+    </div>
+
+    <script src="main.js" type="module"></script>
+  </body>
+</html>
