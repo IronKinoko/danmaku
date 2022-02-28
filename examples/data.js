@@ -3,7 +3,7 @@ export const data = [
   {
     text: '没钱的妹妹，我想到了黑猫 - -',
     time: '1136.75',
-    mode: 'rtl',
+    mode: 'ltr',
     style: {
       color: '#ffffff',
     },
@@ -2947,7 +2947,7 @@ export const data = [
   {
     text: '说Ctrl+W是全屏的站出来我保证打死你',
     time: '0.00',
-    mode: 'rtl',
+    mode: 'ltr',
     style: {
       color: '#ffffff',
     },
@@ -14691,7 +14691,7 @@ export const data = [
   {
     text: '王者降临！那就是我！',
     time: '0.34',
-    mode: 'rtl',
+    mode: 'ltr',
     style: {
       color: '#ffffff',
     },

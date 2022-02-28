@@ -9,7 +9,7 @@ export interface Comment {
    * @default media?.currentTime
    */
   time?: number
-  style?: Partial<CSSStyleDeclaration | CanvasRenderingContext2D>
+  style?: Partial<CSSStyleDeclaration>
   /**
    * A custom render to draw comment.
    * When it exist, `text` and `style` will be ignored.
@@ -30,11 +30,6 @@ export interface DanmakuOption {
    * Preseted comments, used in media mode
    */
   comments?: Comment[]
-  /**
-   * Canvas engine may more efficient than DOM however it costs more memory.
-   * @default dom
-   */
-  engine?: 'dom' | 'canvas'
   /**
    * The speed of comments in `ltr` and `rtl` mode.
    */
@@ -66,7 +61,6 @@ declare class Danmaku {
 
   reload(comments: Comment[]): Danmaku
   comments: Comment[]
-  engine: 'dom' | 'canvas'
   media?: HTMLMediaElement
 }
 

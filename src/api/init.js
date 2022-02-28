@@ -1,5 +1,4 @@
 import domEngine from '../engine/dom.js'
-import canvasEngine from '../engine/canvas.js'
 import { bindEvents } from '../internal/events.js'
 import play from '../internal/play.js'
 import seek from '../internal/seek.js'
@@ -12,22 +11,8 @@ export default function (opt) {
   this.media = opt.media
   this._.visible = true
 
-  /* eslint-disable no-undef */
-  /* istanbul ignore next */
-  if (process.env.ENGINE === 'dom') {
-    this.engine = 'dom'
-    this._.engine = domEngine
-  }
-  /* istanbul ignore next */
-  if (process.env.ENGINE === 'canvas') {
-    this.engine = 'canvas'
-    this._.engine = canvasEngine
-  }
-  /* istanbul ignore else */
-  if (!process.env.ENGINE) {
-    this.engine = (opt.engine || 'DOM').toLowerCase()
-    this._.engine = this.engine === 'canvas' ? canvasEngine : domEngine
-  }
+  this._.engine = domEngine
+
   /* eslint-enable no-undef */
   this._.requestID = 0
 
