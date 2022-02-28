@@ -69,14 +69,10 @@ export function setup(stage, comments) {
 
 export function render({ stage, cmt, pbr, duration, currentTime }) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
-<<<<<<< HEAD
     const maxWidth = cmt.width + stage.width
     const percent = (currentTime - cmt.time) / duration
     const offset = maxWidth * percent
     const start = cmt.mode === 'rtl' ? stage.width - offset : offset - cmt.width
-=======
-    const start = cmt.mode === 'rtl' ? stage.width : 0 - cmt.width
->>>>>>> 18cfed5e5a33e1d86031b55dff838eab6f9e494e
     const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
     cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
 
