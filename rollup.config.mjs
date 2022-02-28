@@ -1,5 +1,6 @@
 import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
+import { babel } from '@rollup/plugin-babel'
 
 const configs = ['', 'dom', 'canvas'].map((engine) => {
   const files = ['', 'min'].map((env) =>
@@ -22,6 +23,7 @@ const configs = ['', 'dom', 'canvas'].map((engine) => {
       )
     ),
     plugins: [
+      babel({ babelHelpers: 'bundled' }),
       replace({ preventAssignment: true, 'process.env.ENGINE': `"${engine}"` }),
     ],
   }
