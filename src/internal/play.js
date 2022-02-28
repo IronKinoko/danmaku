@@ -12,13 +12,7 @@ export default function () {
     })
 
     if (this._.paused) {
-      this._.engine.play({
-        stage: this._.stage,
-        comments: this._.runningList,
-        pbr: this.media ? this.media.playbackRate : 1,
-        currentTime: this.media ? this.media.currentTime : Date.now(),
-        duration: this._.duration,
-      })
+      this.refresh()
     }
   }
 

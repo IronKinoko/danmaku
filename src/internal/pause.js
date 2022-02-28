@@ -8,6 +8,6 @@ export default function () {
   this._.paused = true
   caf(this._.requestID)
   this._.requestID = 0
-  this._.engine.pause(this._.runningList)
+  this._.engine.pause(this._.stage, this._.runningList)
   return this
 }

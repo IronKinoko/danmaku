@@ -10,6 +10,7 @@ export default {
     if (this._.stage.width) {
       this._.duration = this._.stage.width / s
     }
+    this.refresh()
     return s
   },
 }

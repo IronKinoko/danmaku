@@ -58,7 +58,7 @@ declare class Danmaku {
    * Do it when you resize container.
    */
   resize(): Danmaku
-
+  refresh(): Danmaku
   reload(comments: Comment[]): Danmaku
   comments: Comment[]
   media?: HTMLMediaElement

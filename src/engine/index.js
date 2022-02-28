@@ -48,6 +48,7 @@ export default function (framing, setup, render, remove) {
         pbr,
         currentTime,
         duration: this._.duration,
+        speed: this._.speed,
       })
       this._.runningList.push(cmt)
     })

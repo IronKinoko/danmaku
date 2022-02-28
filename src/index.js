@@ -7,6 +7,7 @@ import clear from './api/clear.js'
 import resize from './api/resize.js'
 import speed from './api/speed.js'
 import reload from './api/reload'
+import refresh from './api/refresh.js'
 
 function Danmaku(opt) {
   opt && init.call(this, opt)
@@ -31,6 +32,9 @@ Danmaku.prototype.resize = function () {
 }
 Danmaku.prototype.reload = function () {
   return reload.call(this)
+}
+Danmaku.prototype.refresh = function () {
+  return refresh.call(this)
 }
 Object.defineProperty(Danmaku.prototype, 'speed', speed)
 

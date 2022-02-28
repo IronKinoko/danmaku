@@ -67,7 +67,7 @@ export function setup(stage, comments) {
   }
 }
 
-export function render({ stage, cmt, pbr, duration, currentTime }) {
+export function render({ stage, cmt, pbr, speed, duration, currentTime }) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
     const maxWidth = cmt.width + stage.width
     const percent = (currentTime - cmt.time) / duration
@@ -75,11 +75,10 @@ export function render({ stage, cmt, pbr, duration, currentTime }) {
     const start = cmt.mode === 'rtl' ? stage.width - offset : offset - cmt.width
     const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
     cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
-
     raf(() => {
       cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
       cmt.node.style.transition = `transform ${
-        (duration - (currentTime - cmt.time)) / pbr
+        Math.abs(end - start) / speed / pbr
       }s linear`
     })
   } else {
@@ -95,25 +94,32 @@ export function remove(stage, cmt) {
   }
 }
 
-export function pause(comments) {
+export function pause(stage, comments) {
+  const { x: baseX } = stage.getBoundingClientRect()
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const { x } = cmt.node.getBoundingClientRect()
+      const start = x - baseX
       cmt.node.style.transition = ''
-      cmt.node.style.transform = `translateX(${x}px) translateY(${cmt.y}px) translateZ(0)`
+      cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
     }
   })
 }
 
-export function play({ stage, comments, pbr, duration, currentTime }) {
+export function play({ stage, comments, pbr, speed }) {
+  const { x: baseX } = stage.getBoundingClientRect()
+
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      const { x } = cmt.node.getBoundingClientRect()
+      const start = x - baseX
+
       const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
 
       raf(() => {
         cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
         cmt.node.style.transition = `transform ${
-          (duration - (currentTime - cmt.time)) / pbr
+          Math.abs(start - end) / speed / pbr
         }s linear`
       })
     }
