@@ -13,8 +13,9 @@ export function createCommentNode(cmt) {
   if (cmt.mode === 'top' || cmt.mode === 'bottom') {
     node.style.left = '50%'
     node.style.transform = 'translateX(-50%)'
-    node.style.willChange = 'transform, opacity'
   }
+  node.style.willChange = 'transform, opacity'
+
   node.textContent = cmt.text
   if (cmt.style) {
     for (var key in cmt.style) {
