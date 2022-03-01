@@ -51,3 +51,16 @@ export function resetSpace(space) {
   space.top = collidableRange()
   space.bottom = collidableRange()
 }
+
+export function bindEngine(engine) {
+  const ret = {}
+  for (const key in engine) {
+    if (Object.hasOwnProperty.call(engine, key)) {
+      const value = engine[key]
+      if (typeof value === 'function') {
+        ret[key] = value.bind(this)
+      } else ret[key] = value
+    }
+  }
+  return ret
+}

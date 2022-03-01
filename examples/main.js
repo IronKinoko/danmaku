@@ -13,4 +13,12 @@ import Danmaku from '../dist/esm/danmaku.js'
     core.resize()
   })
   ob.observe($('.danmaku-container'))
+
+  window.core = core
+
+  $('#show').onclick = () => {
+    core.reload(data)
+    core.show()
+  }
+  $('#hide').onclick = () => core.hide()
 })()

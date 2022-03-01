@@ -1,14 +1,14 @@
+import seek from '../internal/seek'
 import { formatMode } from '../utils'
 
 /* eslint-disable no-invalid-this */
 export default function (comments) {
   this.clear()
-  this.comments = comments || []
-  this.comments.sort(function (a, b) {
-    return a.time - b.time
+  this.comments = (comments || []).map((cmt) => ({ ...cmt }))
+  this.comments.sort((a, b) => a.time - b.time)
+  this.comments.forEach((cmt) => {
+    cmt.mode = formatMode(cmt.mode)
   })
-  for (var i = 0; i < this.comments.length; i++) {
-    this.comments[i].mode = formatMode(this.comments[i].mode)
-  }
+  seek.call(this)
   return this
 }

@@ -48,8 +48,5 @@ export default function (cmt) {
     height: cmt.height,
   }
   crs.splice(last + 1, curr - last - 1, crObj)
-  if (cmt.mode === 'bottom') {
-    return this._.stage.height - cmt.height - (channel % this._.stage.height)
-  }
   return channel % (this._.stage.height - cmt.height)
 }

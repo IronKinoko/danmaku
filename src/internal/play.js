@@ -12,6 +12,7 @@ export default function () {
     })
 
     if (this._.paused) {
+      this._.paused = false
       this.refresh()
     }
   }
@@ -20,10 +21,10 @@ export default function () {
 
   var that = this
   var engine = createEngine(
-    this._.engine.framing.bind(this),
-    this._.engine.setup.bind(this),
-    this._.engine.render.bind(this),
-    this._.engine.remove.bind(this)
+    this._.engine.framing,
+    this._.engine.setup,
+    this._.engine.render,
+    this._.engine.remove
   )
   function frame() {
     engine.call(that)

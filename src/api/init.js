@@ -2,7 +2,7 @@ import domEngine from '../engine/dom.js'
 import { bindEvents } from '../internal/events.js'
 import play from '../internal/play.js'
 import seek from '../internal/seek.js'
-import { formatMode, resetSpace } from '../utils.js'
+import { bindEngine, formatMode, resetSpace } from '../utils.js'
 
 /* eslint-disable no-invalid-this */
 export default function (opt) {
@@ -11,7 +11,7 @@ export default function (opt) {
   this.media = opt.media
   this._.visible = true
 
-  this._.engine = domEngine
+  this._.engine = bindEngine.call(this, domEngine)
 
   /* eslint-enable no-undef */
   this._.requestID = 0
@@ -19,13 +19,12 @@ export default function (opt) {
   this._.speed = Math.max(0, opt.speed) || 144
   this._.duration = 4
 
-  this.comments = opt.comments || []
-  this.comments.sort(function (a, b) {
-    return a.time - b.time
+  this.comments = (opt.comments || []).map((cmt) => ({ ...cmt }))
+  this.comments.sort((a, b) => a.time - b.time)
+  this.comments.forEach((cmt) => {
+    cmt.mode = formatMode(cmt.mode)
   })
-  for (var i = 0; i < this.comments.length; i++) {
-    this.comments[i].mode = formatMode(this.comments[i].mode)
-  }
+  this._.rafIds = new Set()
   this._.runningList = []
   this._.position = 0
 

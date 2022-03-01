@@ -30,8 +30,8 @@ Danmaku.prototype.clear = function () {
 Danmaku.prototype.resize = function () {
   return resize.call(this)
 }
-Danmaku.prototype.reload = function () {
-  return reload.call(this)
+Danmaku.prototype.reload = function (comments) {
+  return reload.call(this, comments)
 }
 Danmaku.prototype.refresh = function () {
   return refresh.call(this)

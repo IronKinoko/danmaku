@@ -14,7 +14,7 @@ export function bindEvents(_) {
   this.media.addEventListener('playing', _.play)
   this.media.addEventListener('waiting', _.pause)
   this.media.addEventListener('seeking', _.seeking)
-  this.media.removeEventListener('ratechange', _.ratechange)
+  this.media.addEventListener('ratechange', _.ratechange)
 }
 
 /* eslint no-invalid-this: 0 */

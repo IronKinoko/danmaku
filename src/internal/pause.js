@@ -8,6 +8,8 @@ export default function () {
   this._.paused = true
   caf(this._.requestID)
   this._.requestID = 0
+  this._.rafIds.forEach(caf)
+  this._.rafIds.clear()
   this._.engine.pause(this._.stage, this._.runningList)
   return this
 }

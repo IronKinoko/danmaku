@@ -67,7 +67,7 @@ export function setup(stage, comments) {
   }
 }
 
-export function render({ stage, cmt, pbr, speed, duration, currentTime }) {
+export function render({ stage, cmt, pbr, duration, currentTime }) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
     const maxWidth = cmt.width + stage.width
     const percent = (currentTime - cmt.time) / duration
@@ -75,14 +75,18 @@ export function render({ stage, cmt, pbr, speed, duration, currentTime }) {
     const start = cmt.mode === 'rtl' ? stage.width - offset : offset - cmt.width
     const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
     cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
-    raf(() => {
+    const rafId = raf(() => {
       cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
       cmt.node.style.transition = `transform ${
-        Math.abs(end - start) / speed / pbr
+        (duration - (currentTime - cmt.time)) / pbr
       }s linear`
+      this._.rafIds.delete(rafId)
     })
-  } else {
+    this._.rafIds.add(rafId)
+  } else if (cmt.mode === 'top') {
     cmt.node.style.top = cmt.y + 'px'
+  } else if (cmt.mode === 'bottom') {
+    cmt.node.style.bottom = cmt.y + 'px'
   }
 }
 /* eslint no-invalid-this: 0 */
@@ -99,29 +103,31 @@ export function pause(stage, comments) {
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const { x } = cmt.node.getBoundingClientRect()
-      const start = x - baseX
+      const offset = x - baseX
       cmt.node.style.transition = ''
-      cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
+      cmt.node.style.transform = `translateX(${offset}px) translateY(${cmt.y}px) translateZ(0)`
     }
   })
 }
 
-export function play({ stage, comments, pbr, speed }) {
+export function play({ stage, comments, pbr, duration }) {
   const { x: baseX } = stage.getBoundingClientRect()
 
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      const isRTL = cmt.mode === 'rtl'
+
       const { x } = cmt.node.getBoundingClientRect()
-      const start = x - baseX
 
-      const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
+      const offset = x - baseX
+      const maxWidth = cmt.width + stage.width
+      const undoneWidth = isRTL ? offset + cmt.width : stage.width - offset
 
-      raf(() => {
-        cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
-        cmt.node.style.transition = `transform ${
-          Math.abs(start - end) / speed / pbr
-        }s linear`
-      })
+      const end = isRTL ? -cmt.width : stage.width
+      cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
+      cmt.node.style.transition = `transform ${
+        ((undoneWidth / maxWidth) * duration) / pbr
+      }s linear`
     }
   })
 }
