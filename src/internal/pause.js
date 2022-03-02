@@ -10,6 +10,10 @@ export default function () {
   this._.requestID = 0
   this._.rafIds.forEach(caf)
   this._.rafIds.clear()
-  this._.engine.pause(this._.stage, this._.runningList)
+  this._.engine.pause({
+    stage: this._.stage,
+    comments: this._.runningList,
+    currentTime: this.media ? this.media.currentTime : Date.now(),
+  })
   return this
 }

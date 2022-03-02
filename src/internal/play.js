@@ -7,10 +7,6 @@ export default function () {
     return this
   }
   if (this.media) {
-    this._.runningList.forEach((cmt) => {
-      cmt._utc = Date.now() / 1000 - (this.media.currentTime - cmt.time)
-    })
-
     if (this._.paused) {
       this._.paused = false
       this.refresh()

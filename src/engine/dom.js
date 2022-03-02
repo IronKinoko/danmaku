@@ -69,18 +69,30 @@ export function setup(stage, comments) {
 }
 
 export function render({ stage, cmt, pbr, duration, currentTime }) {
+  cmt.duration = duration - (currentTime - cmt.time)
+
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+    const isRTL = cmt.mode === 'rtl'
     const maxWidth = cmt.width + stage.width
     const percent = (currentTime - cmt.time) / duration
     const offset = maxWidth * percent
     const start = cmt.mode === 'rtl' ? stage.width - offset : offset - cmt.width
     const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
-    cmt.node.style.transform = `translateX(${start}px) translateY(${cmt.y}px) translateZ(0)`
+
+    cmt.node.style.top = cmt.y + 'px'
+    if (isRTL) cmt.node.style.left = start + 'px'
+    else cmt.node.style.right = end - offset + 'px'
+
+    cmt._ = {
+      end: end - start,
+      currentTime: currentTime,
+      maxLength: Math.abs(maxWidth - offset),
+    }
+
+    cmt.node.style.transform = `translateX(0) translateZ(0)`
     const rafId = raf(() => {
-      cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
-      cmt.node.style.transition = `transform ${
-        (duration - (currentTime - cmt.time)) / pbr
-      }s linear`
+      cmt.node.style.transform = `translateX(${cmt._.end}px)`
+      cmt.node.style.transition = `transform ${cmt.duration / pbr}s linear`
       this._.rafIds.delete(rafId)
     })
     this._.rafIds.add(rafId)
@@ -99,35 +111,28 @@ export function remove(stage, cmt) {
   }
 }
 
-export function pause(stage, comments) {
-  const { x: baseX } = stage.getBoundingClientRect()
-  comments.forEach((cmt) => {
-    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
-      const { x } = cmt.node.getBoundingClientRect()
-      const offset = x - baseX
-      cmt.node.style.transition = ''
-      cmt.node.style.transform = `translateX(${offset}px) translateY(${cmt.y}px) translateZ(0)`
-    }
-  })
-}
-
-export function play({ stage, comments, pbr, duration }) {
-  const { x: baseX } = stage.getBoundingClientRect()
-
+export function pause({ comments, currentTime }) {
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const isRTL = cmt.mode === 'rtl'
 
-      const { x } = cmt.node.getBoundingClientRect()
+      const offset =
+        ((currentTime - cmt._.currentTime) / cmt.duration) * cmt._.maxLength
 
-      const offset = x - baseX
-      const maxWidth = cmt.width + stage.width
-      const undoneWidth = isRTL ? offset + cmt.width : stage.width - offset
+      cmt.node.style.transition = ''
+      cmt.node.style.transform = `translateX(${isRTL ? '-' : ''}${offset}px)`
+      cmt.node.style.animationPlayState = 'paused'
+    }
+  })
+}
 
-      const end = isRTL ? -cmt.width : stage.width
-      cmt.node.style.transform = `translateX(${end}px) translateY(${cmt.y}px) translateZ(0)`
+export function play({ comments, pbr, currentTime }) {
+  comments.forEach((cmt) => {
+    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      cmt.node.style.animationPlayState = ''
+      cmt.node.style.transform = `translateX(${cmt._.end}px)`
       cmt.node.style.transition = `transform ${
-        ((undoneWidth / maxWidth) * duration) / pbr
+        (cmt.duration - (currentTime - cmt._.currentTime)) / pbr
       }s linear`
     }
   })

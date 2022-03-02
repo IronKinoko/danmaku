@@ -9,11 +9,10 @@ export default function (framing, setup, render, remove) {
     var pbr = this.media ? this.media.playbackRate : 1
     var cmt = null
     var cmtTime = 0
-    var i = 0
-    for (i = this._.runningList.length - 1; i >= 0; i--) {
+    for (let i = this._.runningList.length - 1; i >= 0; i--) {
       cmt = this._.runningList[i]
       cmtTime = this.media ? cmt.time : cmt._utc
-      if (currentTime - cmtTime > this._.duration) {
+      if (currentTime - cmtTime > cmt.duration) {
         remove(this._.stage, cmt)
         this._.runningList.splice(i, 1)
       }
@@ -31,9 +30,6 @@ export default function (framing, setup, render, remove) {
       if (currentTime - cmtTime > this._.duration) {
         ++this._.position
         continue
-      }
-      if (this.media) {
-        cmt._utc = dateNow - (this.media.currentTime - cmtTime)
       }
       pendingList.push(cmt)
       ++this._.position

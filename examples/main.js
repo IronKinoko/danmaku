@@ -1,5 +1,12 @@
 import { data } from './data.js'
 import Danmaku from '../dist/esm/danmaku.js'
+
+data.forEach((o) => {
+  o.time = +o.time
+
+  // o.mode="rtl"
+})
+
 ;(() => {
   const $ = (selector) => document.querySelector(selector)
 
