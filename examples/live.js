@@ -1,5 +1,5 @@
 import Danmaku from '../dist/esm/danmaku.js'
-
+import { genComment } from './genComment.js'
 ;(function () {
   const $ = (selector) => document.querySelector(selector)
 
@@ -20,9 +20,6 @@ import Danmaku from '../dist/esm/danmaku.js'
   $('#hide').onclick = () => core.hide()
 
   setInterval(() => {
-    core.emit({
-      text: Math.random().toString(16),
-      style: { color: 'white' },
-    })
+    core.emit(genComment())
   }, 100)
 })()

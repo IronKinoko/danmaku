@@ -56,37 +56,52 @@ export function setup(stage, comments) {
   if (comments.length) {
     stage.appendChild(df)
   }
+
+  const currentTime = this._.currentTime
+  const duration = this._.duration
+
   comments.forEach((cmt) => {
     cmt.width = cmt.width || cmt.node.offsetWidth
     cmt.height = cmt.height || cmt.node.offsetHeight
+
+    cmt._ = {
+      // 剩余时长
+      duration: duration - (currentTime - cmt.time),
+      // 全部时长
+      fullDuration: this._.duration,
+    }
+    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+      const isRTL = cmt.mode === 'rtl'
+      const fullWidth = cmt.width + stage.width
+      const offset = ((currentTime - cmt.time) / duration) * fullWidth
+      const start = isRTL ? stage.width - offset : offset - cmt.width
+      const end = isRTL ? -cmt.width : stage.width
+
+      if (isRTL) cmt.node.style.left = start + 'px'
+      else cmt.node.style.right = end - offset + 'px'
+
+      Object.assign(cmt._, {
+        // 偏移量
+        end: end - start,
+        // 起始偏移时间
+        currentTime: currentTime,
+        // 剩余总长
+        leftWidth: Math.abs(fullWidth - offset),
+        // 全长
+        fullWidth: fullWidth,
+      })
+    }
   })
 }
 
-export function render({ stage, cmt, pbr, duration, currentTime }) {
-  cmt.duration = duration - (currentTime - cmt.time)
-
+export function render({ cmt, pbr }) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
-    const isRTL = cmt.mode === 'rtl'
-    const maxWidth = cmt.width + stage.width
-    const percent = (currentTime - cmt.time) / duration
-    const offset = maxWidth * percent
-    const start = cmt.mode === 'rtl' ? stage.width - offset : offset - cmt.width
-    const end = cmt.mode === 'rtl' ? -cmt.width : stage.width
-
     cmt.node.style.top = cmt.y + 'px'
-    if (isRTL) cmt.node.style.left = start + 'px'
-    else cmt.node.style.right = end - offset + 'px'
 
-    cmt._ = {
-      end: end - start,
-      currentTime: currentTime,
-      maxLength: Math.abs(maxWidth - offset),
-    }
-
-    cmt.node.style.transform = `translateX(0) translateZ(0)`
+    cmt.node.style.transform = `translateX(0)`
     const rafId = raf(() => {
       cmt.node.style.transform = `translateX(${cmt._.end}px)`
-      cmt.node.style.transition = `transform ${cmt.duration / pbr}s linear`
+      cmt.node.style.transition = `transform ${cmt._.duration / pbr}s linear`
       this._.rafIds.delete(rafId)
     })
     this._.rafIds.add(rafId)
@@ -110,7 +125,7 @@ export function pause({ comments, currentTime }) {
       const isRTL = cmt.mode === 'rtl'
 
       const offset =
-        ((currentTime - cmt._.currentTime) / cmt.duration) * cmt._.maxLength
+        ((currentTime - cmt._.currentTime) / cmt._.duration) * cmt._.leftWidth
 
       cmt.node.style.transition = ''
       cmt.node.style.transform = `translateX(${isRTL ? '-' : ''}${offset}px)`
@@ -125,7 +140,7 @@ export function play({ comments, pbr, currentTime }) {
       cmt.node.style.animationPlayState = ''
       cmt.node.style.transform = `translateX(${cmt._.end}px)`
       cmt.node.style.transition = `transform ${
-        (cmt.duration - (currentTime - cmt._.currentTime)) / pbr
+        (cmt._.duration - (currentTime - cmt._.currentTime)) / pbr
       }s linear`
     }
   })

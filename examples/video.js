@@ -1,12 +1,9 @@
 import Danmaku from '../dist/esm/danmaku.js'
+import { genComment } from './genComment.js'
 
 function genComments() {
   return [...Array(9999)].map((_, i) => {
-    return {
-      text: i,
-      time: i / 30,
-      style: { color: 'white' },
-    }
+    return genComment(i / 10)
   })
 }
 

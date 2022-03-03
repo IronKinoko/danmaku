@@ -1,25 +1,41 @@
 export default function (cmt) {
-  const ct = this._.currentTime
-  const pbr = this.media ? this.media.playbackRate : 1
+  const currentTime = this._.currentTime
   const willCollide = (cr, cmt) => {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-      return ct - cr.time < this._.duration
+      return currentTime - cr.time < cmt._.fullDuration
     }
-    const crTotalWidth = this._.stage.width + cr.width
-    const crElapsed = (crTotalWidth * (ct - cr.time) * pbr) / this._.duration
-    if (cr.width > crElapsed) {
+
+    const offset =
+      ((currentTime - cr.time) / cr._.fullDuration) * cr._.fullWidth
+
+    if (cr.width > offset) {
       return true
     }
-    // (rtl mode) the right end of `cr` move out of left side of stage
-    const crLeftTime = this._.duration + cr.time - ct
-    const cmtTotalWidth = this._.stage.width + cmt.width
-    const cmtTime = cmt.time
-    const cmtElapsed = (cmtTotalWidth * (ct - cmtTime) * pbr) / this._.duration
-    const cmtArrival = this._.stage.width - cmtElapsed
-    // (rtl mode) the left end of `cmt` reach the left side of stage
-    const cmtArrivalTime =
-      (this._.duration * cmtArrival) / (this._.stage.width + cmt.width)
-    return crLeftTime > cmtArrivalTime
+
+    // 从右往左，计算追尾时间
+    //    cmtGoal crGoal screen                                <--start
+    // --|-------|-----|-----------------------------------------------
+    //           |     .<-  crLeftWidth   ->|<--cr-->|
+    //   |             .<-  cmtLeftWidth              ->|<----cmt---->|
+
+    const crWidth = cr.width
+    const crDuration = cr._.fullDuration - (currentTime - cr.time)
+    const crLeftWidth =
+      (cr._.fullWidth * crDuration) / cr._.fullDuration - cr.width
+    const crSpeed = cr._.fullWidth / cr._.fullDuration
+
+    const cmtDuration = cmt._.fullDuration - (currentTime - cmt.time)
+    const cmtLeftWidth =
+      (cmt._.fullWidth * cmtDuration) / cmt._.fullDuration - cmt.width
+    const cmtSpeed = cmt._.fullWidth / cmt._.fullDuration
+
+    // cmt 速度大，且有差距时才会发生碰撞，
+    return cmtLeftWidth > crLeftWidth + crWidth
+      ? cmtSpeed > crSpeed
+        ? crDuration >
+          (cmtLeftWidth - (crLeftWidth + crWidth)) / (cmtSpeed - crSpeed)
+        : false
+      : true
   }
   const crs = this._.space[cmt.mode]
   let last = 0
@@ -42,8 +58,10 @@ export default function (cmt) {
   const crObj = {
     range: channel + cmt.height,
     time: cmt.time,
+    text: cmt.text,
     width: cmt.width,
     height: cmt.height,
+    _: cmt._,
   }
   crs.splice(last + 1, curr - last - 1, crObj)
   return channel % (this._.stage.height - cmt.height)

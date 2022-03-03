@@ -8,7 +8,7 @@ export default function (framing, setup, render, remove) {
     for (let i = this._.runningList.length - 1; i >= 0; i--) {
       const cmt = this._.runningList[i]
       const cmtTime = cmt.time
-      if (currentTime - cmtTime > cmt.duration) {
+      if (currentTime - cmtTime > cmt._.fullDuration) {
         remove(this._.stage, cmt)
         this._.runningList.splice(i, 1)
       }
@@ -34,14 +34,7 @@ export default function (framing, setup, render, remove) {
 
     pendingList.forEach((cmt) => {
       cmt.y = allocate.call(this, cmt)
-      render({
-        stage: this._.stage,
-        cmt,
-        pbr,
-        currentTime,
-        duration: this._.duration,
-        speed: this._.speed,
-      })
+      render({ cmt, pbr })
       this._.runningList.push(cmt)
     })
   }

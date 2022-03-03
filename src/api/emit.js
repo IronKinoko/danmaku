@@ -5,7 +5,7 @@ export default function (obj) {
     return this
   }
   const cmt = Object.assign({}, obj)
-  cmt.text = (cmt.text || '').toString()
+  cmt.text = (cmt.text ?? '').toString()
   cmt.mode = formatMode(cmt.mode)
   if (this.media) {
     let position = 0

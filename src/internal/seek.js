@@ -6,7 +6,11 @@ export default function () {
   }
   this.clear()
   resetSpace(this._.space)
-  const position = binsearch(this.comments, 'time', this.media.currentTime)
+  const position = binsearch(
+    this.comments,
+    'time',
+    this._.currentTime - this._.duration
+  )
   this._.position = Math.max(0, position - 1)
   return this
 }
