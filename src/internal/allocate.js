@@ -13,10 +13,10 @@ export default function (cmt) {
     }
 
     // 从右往左，计算追尾时间
-    //    cmtGoal crGoal screen                                <--start
-    // --|-------|-----|-----------------------------------------------
-    //           |     .<-  crLeftWidth   ->|<--cr-->|
-    //   |             .<-  cmtLeftWidth              ->|<----cmt---->|
+    //   cmtGoal   crGoal  screen                                    <--start
+    // --|---------|-------|-------------------------------------------------
+    //             |       .<-   crLeftWidth   ->|<--cr-->|
+    //   |                 .<-   cmtLeftWidth               ->|<----cmt---->|
 
     const crWidth = cr.width
     const crDuration = cr._.fullDuration - (currentTime - cr.time)
