@@ -1,5 +1,5 @@
 export default function (cmt) {
-  const ct = this.media ? this.media.currentTime : Date.now() / 1000
+  const ct = this._.currentTime
   const pbr = this.media ? this.media.playbackRate : 1
   const willCollide = (cr, cmt) => {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
@@ -13,7 +13,7 @@ export default function (cmt) {
     // (rtl mode) the right end of `cr` move out of left side of stage
     const crLeftTime = this._.duration + cr.time - ct
     const cmtTotalWidth = this._.stage.width + cmt.width
-    const cmtTime = this.media ? cmt.time : cmt._utc
+    const cmtTime = cmt.time
     const cmtElapsed = (cmtTotalWidth * (ct - cmtTime) * pbr) / this._.duration
     const cmtArrival = this._.stage.width - cmtElapsed
     // (rtl mode) the left end of `cmt` reach the left side of stage
@@ -41,7 +41,7 @@ export default function (cmt) {
   const channel = crs[last].range
   const crObj = {
     range: channel + cmt.height,
-    time: this.media ? cmt.time : cmt._utc,
+    time: cmt.time,
     width: cmt.width,
     height: cmt.height,
   }

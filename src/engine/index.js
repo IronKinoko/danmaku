@@ -3,12 +3,11 @@ import allocate from '../internal/allocate.js'
 export default function (framing, setup, render, remove) {
   return function () {
     framing(this._.stage)
-    const dateNow = Date.now() / 1000
-    const currentTime = this.media ? this.media.currentTime : dateNow
+    const currentTime = this._.currentTime
     const pbr = this.media ? this.media.playbackRate : 1
     for (let i = this._.runningList.length - 1; i >= 0; i--) {
       const cmt = this._.runningList[i]
-      const cmtTime = this.media ? cmt.time : cmt._utc
+      const cmtTime = cmt.time
       if (currentTime - cmtTime > cmt.duration) {
         remove(this._.stage, cmt)
         this._.runningList.splice(i, 1)
@@ -17,7 +16,7 @@ export default function (framing, setup, render, remove) {
     const pendingList = []
     while (this._.position < this.comments.length) {
       const cmt = this.comments[this._.position]
-      const cmtTime = this.media ? cmt.time : cmt._utc
+      const cmtTime = cmt.time
       if (cmtTime >= currentTime) {
         break
       }

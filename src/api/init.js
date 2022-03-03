@@ -17,6 +17,10 @@ export default function (opt) {
   this._.speed = Math.max(0, opt.speed) || 144
   this._.duration = 4
 
+  Object.defineProperty(this._, 'currentTime', {
+    get: () => (this.media ? this.media.currentTime : Date.now() / 1000),
+  })
+
   this.comments = (opt.comments || []).map((cmt) => ({ ...cmt }))
   this.comments.sort((a, b) => a.time - b.time)
   this.comments.forEach((cmt) => {

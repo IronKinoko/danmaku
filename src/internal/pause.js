@@ -12,7 +12,7 @@ export default function () {
   this._.engine.pause({
     stage: this._.stage,
     comments: this._.runningList,
-    currentTime: this.media ? this.media.currentTime : Date.now(),
+    currentTime: this._.currentTime,
   })
   return this
 }

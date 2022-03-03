@@ -8,7 +8,7 @@ export default function () {
   this._.engine.pause({
     stage: this._.stage,
     comments: this._.runningList,
-    currentTime: this.media ? this.media.currentTime : Date.now(),
+    currentTime: this._.currentTime,
   })
   this._.rafIds.forEach(caf)
   this._.rafIds.clear()
@@ -18,7 +18,7 @@ export default function () {
       stage: this._.stage,
       comments: this._.runningList,
       pbr: this.media ? this.media.playbackRate : 1,
-      currentTime: this.media ? this.media.currentTime : Date.now(),
+      currentTime: this._.currentTime,
       duration: this._.duration,
       rafIds: this._.rafIds,
     })

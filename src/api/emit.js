@@ -20,7 +20,7 @@ export default function (obj) {
     }
     this.comments.splice(position, 0, cmt)
   } else {
-    cmt.time = Date.now()
+    cmt.time = Date.now() / 1000
     this.comments.push(cmt)
   }
   return this
