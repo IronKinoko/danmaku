@@ -135,7 +135,7 @@ danmaku.emit({
   // it will be set to `media.currentTime`. Not required in live mode.
   time: 233.3,
 
-  // When using DOM engine, Danmaku will create a <div> node for each comment,
+  // Danmaku will create a <div> node for each comment,
   // the style object will be set to `node.style` directly, just write with CSS rules.
   // For example:
   style: {
@@ -145,25 +145,10 @@ danmaku.emit({
     textShadow: '-1px -1px #000, -1px 1px #000, 1px -1px #000, 1px 1px #000',
   },
 
-  // When using canvas engine, Danmaku will create a <canvas> object for each comment,
-  // you should pass in a CanvasRenderingContext2D object.
-  // For example:
-  style: {
-    font: '10px sans-serif',
-    textAlign: 'start',
-    // Note that 'bottom' is the default
-    textBaseline: 'bottom',
-    direction: 'inherit',
-    fillStyle: '#000',
-    strokeStyle: '#000',
-    lineWidth: 1.0,
-    // ...
-  },
-
   // A custom render to draw comment.
   // when `render` exist, `text` and `style` will be ignored.
 
-  // When using DOM engine, you should return an HTMLElement.
+  // you should return an HTMLElement.
   render: function () {
     var $div = document.createElement('div')
     var $img = document.createElement('img')
@@ -171,29 +156,12 @@ danmaku.emit({
     $div.appendChild($img)
     return $div
   },
-  // When using canvas engine, you should return an HTMLCanvasElement.
-  render: function () {
-    var canvas = document.createElement('canvas')
-    canvas.width = 320
-    canvas.height = 180
-    var ctx = canvas.getContext('2d')
-    ctx.beginPath()
-    ctx.arc(75, 75, 50, 0, 2 * Math.PI)
-    ctx.stroke()
-    return canvas
-  },
 })
 ```
 
-More details about [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
-
 Tips:
 
-- With DOM engine, you may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
-- With canvas engine, line height is `1.2` by default, you can set it with `style.font`.
-- With canvas engine, `style.font` uses the same syntax as the [CSS font](https://developer.mozilla.org/en-US/docs/Web/CSS/font) specifier. However you can only use `px`, `%`, `em`, `rem` units, I'm sure you don't need others.
-- There is a hitbox for each comment, which height is determined by its line height. With canvas engine, when `style.textBaseline` is `top` or `hanging`, the baseline is set to top of the hitbox; when it's `middle`, baseline is middle of the hitbox; otherwise baseline is bottom of the hitbox. So if you set `style.textBaseline` to `alphabetic` or `hanging`, the comment's head or foot may out of the hitbox and be invisible.
-- With canvas engine, [`style.filter`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter) is supported in Chrome 52 and Firefox 49.
+- You may want to change line spacing by set `line-height` to each comment, a better way is set `line-height` to the container.
 
 ### Resize
 

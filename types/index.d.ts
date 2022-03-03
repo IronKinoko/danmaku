@@ -1,5 +1,5 @@
 export interface Comment {
-  text?: string
+  text: string
   /**
    * @default rtl
    */
@@ -14,7 +14,7 @@ export interface Comment {
    * A custom render to draw comment.
    * When it exist, `text` and `style` will be ignored.
    */
-  render?(): HTMLElement | HTMLCanvasElement
+  render?(): HTMLElement
 }
 
 export interface DanmakuOption {
