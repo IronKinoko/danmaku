@@ -1,7 +1,6 @@
 import { unbindEvents } from '../internal/events.js'
 import pause from '../internal/pause.js'
 
-/* eslint-disable no-invalid-this */
 export default function () {
   if (!this.container) {
     return this
@@ -13,8 +12,7 @@ export default function () {
   if (this.media) {
     unbindEvents.call(this, this._.listener)
   }
-  for (var key in this) {
-    /* istanbul ignore else  */
+  for (const key in this) {
     if (Object.prototype.hasOwnProperty.call(this, key)) {
       this[key] = null
     }

@@ -1,34 +1,32 @@
-/* eslint no-invalid-this: 0 */
 export default function (cmt) {
-  var that = this
-  var ct = this.media ? this.media.currentTime : Date.now() / 1000
-  var pbr = this.media ? this.media.playbackRate : 1
-  function willCollide(cr, cmt) {
+  const ct = this.media ? this.media.currentTime : Date.now() / 1000
+  const pbr = this.media ? this.media.playbackRate : 1
+  const willCollide = (cr, cmt) => {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
-      return ct - cr.time < that._.duration
+      return ct - cr.time < this._.duration
     }
-    var crTotalWidth = that._.stage.width + cr.width
-    var crElapsed = (crTotalWidth * (ct - cr.time) * pbr) / that._.duration
+    const crTotalWidth = this._.stage.width + cr.width
+    const crElapsed = (crTotalWidth * (ct - cr.time) * pbr) / this._.duration
     if (cr.width > crElapsed) {
       return true
     }
     // (rtl mode) the right end of `cr` move out of left side of stage
-    var crLeftTime = that._.duration + cr.time - ct
-    var cmtTotalWidth = that._.stage.width + cmt.width
-    var cmtTime = that.media ? cmt.time : cmt._utc
-    var cmtElapsed = (cmtTotalWidth * (ct - cmtTime) * pbr) / that._.duration
-    var cmtArrival = that._.stage.width - cmtElapsed
+    const crLeftTime = this._.duration + cr.time - ct
+    const cmtTotalWidth = this._.stage.width + cmt.width
+    const cmtTime = this.media ? cmt.time : cmt._utc
+    const cmtElapsed = (cmtTotalWidth * (ct - cmtTime) * pbr) / this._.duration
+    const cmtArrival = this._.stage.width - cmtElapsed
     // (rtl mode) the left end of `cmt` reach the left side of stage
-    var cmtArrivalTime =
-      (that._.duration * cmtArrival) / (that._.stage.width + cmt.width)
+    const cmtArrivalTime =
+      (this._.duration * cmtArrival) / (this._.stage.width + cmt.width)
     return crLeftTime > cmtArrivalTime
   }
-  var crs = this._.space[cmt.mode]
-  var last = 0
-  var curr = 0
-  for (var i = 1; i < crs.length; i++) {
-    var cr = crs[i]
-    var requiredRange = cmt.height
+  const crs = this._.space[cmt.mode]
+  let last = 0
+  let curr = 0
+  for (let i = 1; i < crs.length; i++) {
+    const cr = crs[i]
+    let requiredRange = cmt.height
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       requiredRange += cr.height
     }
@@ -40,8 +38,8 @@ export default function (cmt) {
       last = i
     }
   }
-  var channel = crs[last].range
-  var crObj = {
+  const channel = crs[last].range
+  const crObj = {
     range: channel + cmt.height,
     time: this.media ? cmt.time : cmt._utc,
     width: cmt.width,

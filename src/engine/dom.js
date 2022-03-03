@@ -1,10 +1,10 @@
 import { raf } from '../utils'
 
 export function createCommentNode(cmt) {
-  var node = document.createElement('div')
+  const node = document.createElement('div')
   node.style.cssText = 'position:absolute;'
   if (typeof cmt.render === 'function') {
-    var $el = cmt.render()
+    const $el = cmt.render()
     if ($el instanceof HTMLElement) {
       node.appendChild($el)
       return node
@@ -18,22 +18,20 @@ export function createCommentNode(cmt) {
 
   node.textContent = cmt.text
   if (cmt.style) {
-    for (var key in cmt.style) {
-      node.style[key] = cmt.style[key]
-    }
+    Object.assign(node.style, cmt.style)
   }
   return node
 }
 
 export function init() {
-  var stage = document.createElement('div')
+  const stage = document.createElement('div')
   stage.style.cssText =
     'overflow:hidden;white-space:nowrap;transform:translateZ(0);'
   return stage
 }
 
 export function clear(stage) {
-  var lc = stage.lastChild
+  let lc = stage.lastChild
   while (lc) {
     stage.removeChild(lc)
     lc = stage.lastChild
@@ -50,22 +48,18 @@ export function framing() {
 }
 
 export function setup(stage, comments) {
-  var df = document.createDocumentFragment()
-  var i = 0
-  var cmt = null
-  for (i = 0; i < comments.length; i++) {
-    cmt = comments[i]
+  const df = document.createDocumentFragment()
+  comments.forEach((cmt) => {
     cmt.node = cmt.node || createCommentNode(cmt)
     df.appendChild(cmt.node)
-  }
+  })
   if (comments.length) {
     stage.appendChild(df)
   }
-  for (i = 0; i < comments.length; i++) {
-    cmt = comments[i]
+  comments.forEach((cmt) => {
     cmt.width = cmt.width || cmt.node.offsetWidth
     cmt.height = cmt.height || cmt.node.offsetHeight
-  }
+  })
 }
 
 export function render({ stage, cmt, pbr, duration, currentTime }) {
@@ -102,10 +96,9 @@ export function render({ stage, cmt, pbr, duration, currentTime }) {
     cmt.node.style.bottom = cmt.y + 'px'
   }
 }
-/* eslint no-invalid-this: 0 */
+
 export function remove(stage, cmt) {
   stage.removeChild(cmt.node)
-  /* istanbul ignore else */
   if (!this.media) {
     cmt.node = null
   }

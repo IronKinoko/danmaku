@@ -1,7 +1,6 @@
 import play from '../internal/play.js'
 import seek from '../internal/seek.js'
 
-/* eslint-disable no-invalid-this */
 export default function () {
   if (this._.visible) {
     return this

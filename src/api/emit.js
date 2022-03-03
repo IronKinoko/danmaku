@@ -1,23 +1,14 @@
 import { formatMode, binsearch } from '../utils.js'
 
-var properties = ['mode', 'time', 'text', 'render', 'style']
-
-/* eslint-disable no-invalid-this */
 export default function (obj) {
   if (!obj || Object.prototype.toString.call(obj) !== '[object Object]') {
     return this
   }
-  var cmt = {}
-  for (var i = 0; i < properties.length; i++) {
-    if (obj[properties[i]] !== undefined) {
-      cmt[properties[i]] = obj[properties[i]]
-    }
-  }
+  const cmt = Object.assign({}, obj)
   cmt.text = (cmt.text || '').toString()
   cmt.mode = formatMode(cmt.mode)
-  cmt._utc = Date.now() / 1000
   if (this.media) {
-    var position = 0
+    let position = 0
     if (cmt.time === undefined) {
       cmt.time = this.media.currentTime
       position = this._.position
@@ -29,6 +20,7 @@ export default function (obj) {
     }
     this.comments.splice(position, 0, cmt)
   } else {
+    cmt.time = Date.now()
     this.comments.push(cmt)
   }
   return this

@@ -1,4 +1,4 @@
-export /* istanbul ignore next */ var raf =
+export const raf =
   window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
@@ -6,16 +6,16 @@ export /* istanbul ignore next */ var raf =
     return setTimeout(cb, 50 / 3)
   }
 
-export /* istanbul ignore next */ var caf =
+export const caf =
   window.cancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
   clearTimeout
 
 export function binsearch(arr, prop, key) {
-  var mid = 0
-  var left = 0
-  var right = arr.length
+  let mid = 0
+  let left = 0
+  let right = arr.length
   while (left < right - 1) {
     mid = (left + right) >> 1
     if (key >= arr[mid][prop]) {
@@ -38,7 +38,7 @@ export function formatMode(mode) {
 }
 
 function collidableRange() {
-  var max = 9007199254740991
+  const max = 9007199254740991
   return [
     { range: 0, time: -max, width: max, height: 0 },
     { range: max, time: max, width: 0, height: 0 },

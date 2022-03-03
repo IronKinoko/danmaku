@@ -3,7 +3,6 @@ import pause from './pause.js'
 import seek from './seek.js'
 import ratechange from './ratechange.js'
 
-/* eslint no-invalid-this: 0 */
 export function bindEvents(_) {
   _.play = play.bind(this)
   _.pause = pause.bind(this)
@@ -17,7 +16,6 @@ export function bindEvents(_) {
   this.media.addEventListener('ratechange', _.ratechange)
 }
 
-/* eslint no-invalid-this: 0 */
 export function unbindEvents(_) {
   this.media.removeEventListener('play', _.play)
   this.media.removeEventListener('pause', _.pause)

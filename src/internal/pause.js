@@ -1,6 +1,5 @@
 import { caf } from '../utils.js'
 
-/* eslint no-invalid-this: 0 */
 export default function () {
   if (!this._.visible || this._.paused) {
     return this

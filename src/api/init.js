@@ -4,7 +4,6 @@ import play from '../internal/play.js'
 import seek from '../internal/seek.js'
 import { bindEngine, formatMode, resetSpace } from '../utils.js'
 
-/* eslint-disable no-invalid-this */
 export default function (opt) {
   this._ = {}
   this.container = opt.container || document.createElement('div')
@@ -13,7 +12,6 @@ export default function (opt) {
 
   this._.engine = bindEngine.call(this, domEngine)
 
-  /* eslint-enable no-undef */
   this._.requestID = 0
 
   this._.speed = Math.max(0, opt.speed) || 144

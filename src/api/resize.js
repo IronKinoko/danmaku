@@ -1,4 +1,3 @@
-/* eslint-disable no-invalid-this */
 export default function () {
   this._.stage.width = this.container.offsetWidth
   this._.stage.height = this.container.offsetHeight
