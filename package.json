@@ -21,6 +21,10 @@
     "version": "npm run build",
     "postversion": "git push && git push --tags && npm publish --access public"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmmirror.com/",
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/IronKinoko/danmaku.git"
