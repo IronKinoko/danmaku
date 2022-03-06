@@ -22,7 +22,7 @@
     "postversion": "git push && git push --tags && npm publish --access public"
   },
   "publishConfig": {
-    "registry": "https://registry.npmmirror.com/",
+    "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "repository": {
