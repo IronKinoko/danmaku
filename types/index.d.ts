@@ -48,6 +48,11 @@ declare class Danmaku {
   get speed(): number
   set speed(s: number)
   /**
+   * The opacity of comments.
+   */
+  get opacity(): number
+  set opacity(s: number)
+  /**
    * Destroy the instance and release memory.
    */
   destroy(): Danmaku
