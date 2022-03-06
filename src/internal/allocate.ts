@@ -1,4 +1,6 @@
-export default function (cmt) {
+import Danmaku from '../danmaku'
+
+export default function (this: Danmaku, cmt) {
   const currentTime = this._.currentTime
   const willCollide = (cr, cmt) => {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {

@@ -1,7 +1,8 @@
-import createEngine from '../engine/index.js'
-import { raf } from '../utils.js'
+import Danmaku from '../danmaku'
+import createEngine from '../engine/index'
+import { raf } from '../utils'
 
-export default function () {
+export default function (this: Danmaku) {
   if (!this._.visible || !this._.paused) {
     return this
   }
@@ -14,14 +15,14 @@ export default function () {
 
   this._.paused = false
 
-  let engine = createEngine(
-    this._.engine.framing,
+  const engine = createEngine(
     this._.engine.setup,
     this._.engine.render,
     this._.engine.remove
-  )
+  ).bind(this)
+
   const frame = () => {
-    engine.call(this)
+    engine()
     this._.requestID = raf(frame)
   }
   this._.requestID = raf(frame)

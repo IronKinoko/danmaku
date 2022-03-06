@@ -1,8 +1,5 @@
 export interface Comment {
   text: string
-  /**
-   * @default rtl
-   */
   mode?: 'ltr' | 'rtl' | 'top' | 'bottom'
   /**
    * Specified in seconds. Not required in live mode.
@@ -39,38 +36,3 @@ export interface DanmakuOption {
    */
   opacity?: number
 }
-
-declare class Danmaku {
-  constructor(option: DanmakuOption)
-  /**
-   * The speed of comments in `ltr` and `rtl` mode.
-   */
-  get speed(): number
-  set speed(s: number)
-  /**
-   * The opacity of comments.
-   */
-  get opacity(): number
-  set opacity(s: number)
-  /**
-   * Destroy the instance and release memory.
-   */
-  destroy(): Danmaku
-  emit(comment: Comment): Danmaku
-  show(): Danmaku
-  hide(): Danmaku
-  /**
-   * Clear current stage.
-   */
-  clear(): Danmaku
-  /**
-   * Do it when you resize container.
-   */
-  resize(): Danmaku
-  refresh(): Danmaku
-  reload(comments: Comment[]): Danmaku
-  comments: Comment[]
-  media?: HTMLMediaElement
-}
-
-export default Danmaku

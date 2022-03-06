@@ -1,6 +1,7 @@
+import { Comment } from '../types'
 import { raf } from '../utils'
 
-export function createCommentNode(cmt) {
+export function createCommentNode(cmt: Comment) {
   const node = document.createElement('div')
   node.style.cssText = 'position:absolute;'
   if (typeof cmt.render === 'function') {
@@ -15,6 +16,7 @@ export function createCommentNode(cmt) {
     node.style.transform = 'translateX(-50%)'
   }
   node.style.willChange = 'transform, opacity'
+  node.className = 'danmaku'
 
   node.textContent = cmt.text
   if (cmt.style) {
@@ -31,7 +33,7 @@ export function init() {
   return stage
 }
 
-export function clear(stage) {
+export function clear(stage: HTMLElement) {
   let lc = stage.lastChild
   while (lc) {
     stage.removeChild(lc)
@@ -42,10 +44,6 @@ export function clear(stage) {
 export function resize(stage) {
   stage.style.width = stage.width + 'px'
   stage.style.height = stage.height + 'px'
-}
-
-export function framing() {
-  //
 }
 
 export function setup(stage, comments) {
@@ -152,7 +150,6 @@ export default {
   init: init,
   clear: clear,
   resize: resize,
-  framing: framing,
   setup: setup,
   render: render,
   remove: remove,

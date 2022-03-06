@@ -1,8 +1,8 @@
-import allocate from '../internal/allocate.js'
+import Danmaku from '../danmaku'
+import allocate from '../internal/allocate'
 
-export default function (framing, setup, render, remove) {
-  return function () {
-    framing(this._.stage)
+export default function (setup, render, remove) {
+  return function (this: Danmaku) {
     const currentTime = this._.currentTime
     const pbr = this.media ? this.media.playbackRate : 1
     for (let i = this._.runningList.length - 1; i >= 0; i--) {

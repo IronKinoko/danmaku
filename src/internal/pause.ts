@@ -1,6 +1,7 @@
-import { caf } from '../utils.js'
+import Danmaku from '../danmaku'
+import { caf } from '../utils'
 
-export default function () {
+export default function (this: Danmaku) {
   if (!this._.visible || this._.paused) {
     return this
   }

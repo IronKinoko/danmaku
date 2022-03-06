@@ -1,6 +1,7 @@
-import { binsearch, resetSpace } from '../utils.js'
+import Danmaku from '../danmaku'
+import { binsearch, resetSpace } from '../utils'
 
-export default function () {
+export default function (this: Danmaku) {
   if (!this.media) {
     return this
   }

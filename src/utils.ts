@@ -1,6 +1,11 @@
+import Danmaku from './danmaku'
+import { Comment } from './types'
+
 export const raf =
   window.requestAnimationFrame ||
+  // @ts-ignore
   window.mozRequestAnimationFrame ||
+  // @ts-ignore
   window.webkitRequestAnimationFrame ||
   function (cb) {
     return setTimeout(cb, 50 / 3)
@@ -8,11 +13,13 @@ export const raf =
 
 export const caf =
   window.cancelAnimationFrame ||
+  // @ts-ignore
   window.mozCancelAnimationFrame ||
+  // @ts-ignore
   window.webkitCancelAnimationFrame ||
   clearTimeout
 
-export function binsearch(arr, prop, key) {
+export function binsearch(arr: any[], prop: string, key: any) {
   let mid = 0
   let left = 0
   let right = arr.length
@@ -28,13 +35,6 @@ export function binsearch(arr, prop, key) {
     return left
   }
   return right
-}
-
-export function formatMode(mode) {
-  if (!/^(ltr|top|bottom)$/i.test(mode)) {
-    return 'rtl'
-  }
-  return mode.toLowerCase()
 }
 
 function collidableRange() {
@@ -57,15 +57,15 @@ function collidableRange() {
   ]
 }
 
-export function resetSpace(space) {
+export function resetSpace(space: any) {
   space.ltr = collidableRange()
   space.rtl = collidableRange()
   space.top = collidableRange()
   space.bottom = collidableRange()
 }
 
-export function bindEngine(engine) {
-  const ret = {}
+export function bindEngine(this: Danmaku, engine: any) {
+  const ret: any = {}
   for (const key in engine) {
     if (Object.hasOwnProperty.call(engine, key)) {
       const value = engine[key]

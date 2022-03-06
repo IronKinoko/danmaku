@@ -1,4 +1,4 @@
-import Danmaku from '../dist/esm/danmaku.js'
+import Danmaku from '../src/danmaku'
 import { genComment } from './genComment.js'
 ;(function () {
   const $ = (selector) => document.querySelector(selector)

@@ -1,9 +1,10 @@
-import play from './play.js'
-import pause from './pause.js'
-import seek from './seek.js'
-import ratechange from './ratechange.js'
+import play from './play'
+import pause from './pause'
+import seek from './seek'
+import ratechange from './ratechange'
+import Danmaku from '../danmaku'
 
-export function bindEvents(_) {
+export function bindEvents(this: Danmaku, _: Danmaku['_']) {
   _.play = play.bind(this)
   _.pause = pause.bind(this)
   _.seeking = seek.bind(this)
