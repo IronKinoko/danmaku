@@ -17,6 +17,8 @@ export default function (opt) {
   this._.speed = Math.max(0, opt.speed) || 144
   this._.duration = 4
 
+  this._.opacity = opt.opacity ?? 1
+
   Object.defineProperty(this._, 'currentTime', {
     get: () => (this.media ? this.media.currentTime : Date.now() / 1000),
   })
@@ -37,7 +39,7 @@ export default function (opt) {
   }
 
   this._.stage = this._.engine.init(this.container)
-  this._.stage.style.cssText += 'position:relative;pointer-events:none;'
+  this._.stage.style.opacity = this._.opacity
 
   this.resize()
   this.container.appendChild(this._.stage)

@@ -34,6 +34,10 @@ export interface DanmakuOption {
    * The speed of comments in `ltr` and `rtl` mode.
    */
   speed?: number
+  /**
+   * The opacity of comments.
+   */
+  opacity?: number
 }
 
 declare class Danmaku {

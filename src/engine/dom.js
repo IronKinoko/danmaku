@@ -26,7 +26,7 @@ export function createCommentNode(cmt) {
 export function init() {
   const stage = document.createElement('div')
   stage.style.cssText =
-    'overflow:hidden;white-space:nowrap;transform:translateZ(0);'
+    'overflow:hidden;white-space:nowrap;transform:translateZ(0);position:relative;pointer-events:none;'
   return stage
 }
 
