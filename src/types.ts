@@ -1,11 +1,16 @@
+type RequiredPick<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
+
+export type Stage = HTMLDivElement & { width: number; height: number }
+
+export type Mode = 'ltr' | 'rtl' | 'top' | 'bottom'
 export interface Comment {
   text: string
-  mode?: 'ltr' | 'rtl' | 'top' | 'bottom'
+  mode?: Mode
   /**
    * Specified in seconds. Not required in live mode.
    * @default media?.currentTime
    */
-  time?: number
+  time: number
   style?: Partial<CSSStyleDeclaration>
   /**
    * A custom render to draw comment.
@@ -13,6 +18,28 @@ export interface Comment {
    */
   render?(): HTMLElement
 }
+
+export type RunningState = {
+  node: HTMLDivElement
+  width: number
+  height: number
+  y: number
+  _: {
+    duration: number
+    fullDuration: number
+    // translateX end position
+    end: number
+    // 起始偏移时间
+    currentTime: number
+    // 剩余总长
+    leftWidth: number
+    // 全长
+    fullWidth: number
+  }
+}
+export type InnerComment = RequiredPick<Comment, 'mode'>
+export type RunningComment = InnerComment & RunningState
+export type RunningCommentRange = RunningComment & { range: number }
 
 export interface DanmakuOption {
   /**
@@ -35,4 +62,21 @@ export interface DanmakuOption {
    * The opacity of comments.
    */
   opacity?: number
+}
+
+export interface InnerState {
+  listener: any
+  space: { [x in Mode]: RunningCommentRange[] }
+  visible: boolean
+  requestID: number
+  speed: number
+  duration: number
+  engine: any
+  rafIds: Set<number>
+  runningList: RunningComment[]
+  position: number
+  paused: boolean
+  opacity: number
+  stage: Stage
+  get currentTime(): number
 }

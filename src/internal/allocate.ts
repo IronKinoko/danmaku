@@ -1,8 +1,9 @@
 import Danmaku from '../danmaku'
+import type { RunningComment, RunningCommentRange } from '../types'
 
-export default function (this: Danmaku, cmt) {
+export default function (this: Danmaku, cmt: RunningComment) {
   const currentTime = this._.currentTime
-  const willCollide = (cr, cmt) => {
+  const willCollide = (cr: RunningComment, cmt: RunningComment) => {
     if (cmt.mode === 'top' || cmt.mode === 'bottom') {
       return currentTime - cr.time < cmt._.fullDuration
     }
@@ -64,7 +65,7 @@ export default function (this: Danmaku, cmt) {
     width: cmt.width,
     height: cmt.height,
     _: cmt._,
-  }
+  } as RunningCommentRange
   crs.splice(last + 1, curr - last - 1, crObj)
   return channel % (this._.stage.height - cmt.height)
 }

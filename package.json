@@ -2,8 +2,8 @@
   "name": "@ironkinoko/danmaku",
   "version": "1.1.6",
   "description": "Display danmaku (flying comments) on HTML5 video.",
-  "main": "dist/danmaku.js",
-  "module": "dist/esm/danmaku.js",
+  "main": "dist/danmaku.umd.js",
+  "module": "dist/danmaku.es.js",
   "sideEffects": false,
   "files": [
     "dist",
@@ -14,7 +14,7 @@
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run dts",
     "dts":"tsc",
     "prettier": "prettier -c -w {src,types}/**/*",
     "version": "npm run build",

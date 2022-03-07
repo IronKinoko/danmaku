@@ -1,5 +1,5 @@
 import Danmaku from './danmaku'
-import { Comment } from './types'
+import type { InnerComment, Comment } from './types'
 
 export const raf =
   window.requestAnimationFrame ||
@@ -37,6 +37,12 @@ export function binsearch(arr: any[], prop: string, key: any) {
   return right
 }
 
+export function transComment(comments?: Comment[]): InnerComment[] {
+  return [...(comments || [])]
+    .sort((a, b) => a.time - b.time)
+    .map((cmt) => ({ ...cmt, mode: cmt.mode ?? 'rtl' }))
+}
+
 function collidableRange() {
   const max = 9007199254740991
   return [
@@ -62,6 +68,7 @@ export function resetSpace(space: any) {
   space.rtl = collidableRange()
   space.top = collidableRange()
   space.bottom = collidableRange()
+  return space
 }
 
 export function bindEngine(this: Danmaku, engine: any) {

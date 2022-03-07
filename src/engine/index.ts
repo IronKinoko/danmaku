@@ -1,7 +1,13 @@
+import { Comment } from '..'
 import Danmaku from '../danmaku'
 import allocate from '../internal/allocate'
+import type { RunningComment, Stage } from '../types'
 
-export default function (setup, render, remove) {
+export default function (
+  setup: (stage: Stage, comments: Comment[]) => RunningComment[],
+  render: (arg0: { cmt: RunningComment; pbr: number }) => void,
+  remove: (stage: Stage, cmt: RunningComment) => void
+) {
   return function (this: Danmaku) {
     const currentTime = this._.currentTime
     const pbr = this.media ? this.media.playbackRate : 1
@@ -20,9 +26,7 @@ export default function (setup, render, remove) {
       if (cmtTime >= currentTime) {
         break
       }
-      // when clicking controls to seek, media.currentTime may changed before
-      // `pause` event is fired, so here skips comments out of duration,
-      // see https://github.com/weizhenye/Danmaku/pull/30 for details.
+
       if (currentTime - cmtTime > this._.duration) {
         ++this._.position
         continue
@@ -30,9 +34,9 @@ export default function (setup, render, remove) {
       pendingList.push(cmt)
       ++this._.position
     }
-    setup(this._.stage, pendingList)
+    const runningComments = setup(this._.stage, pendingList)
 
-    pendingList.forEach((cmt) => {
+    runningComments.forEach((cmt) => {
       cmt.y = allocate.call(this, cmt)
       render({ cmt, pbr })
       this._.runningList.push(cmt)

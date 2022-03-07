@@ -1,7 +1,8 @@
-import { Comment } from '../types'
+import Danmaku from '../danmaku'
+import type { InnerComment, RunningComment, Stage } from '../types'
 import { raf } from '../utils'
 
-export function createCommentNode(cmt: Comment) {
+export function createCommentNode(cmt: InnerComment) {
   const node = document.createElement('div')
   node.style.cssText = 'position:absolute;'
   if (typeof cmt.render === 'function') {
@@ -33,7 +34,7 @@ export function init() {
   return stage
 }
 
-export function clear(stage: HTMLElement) {
+export function clear(stage: Stage) {
   let lc = stage.lastChild
   while (lc) {
     stage.removeChild(lc)
@@ -41,34 +42,29 @@ export function clear(stage: HTMLElement) {
   }
 }
 
-export function resize(stage) {
+export function resize(stage: Stage) {
   stage.style.width = stage.width + 'px'
   stage.style.height = stage.height + 'px'
 }
 
-export function setup(stage, comments) {
+export function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
   const df = document.createDocumentFragment()
-  comments.forEach((cmt) => {
-    cmt.node = cmt.node || createCommentNode(cmt)
-    df.appendChild(cmt.node)
+  const runningComments = comments.map((cmt) => {
+    const node = createCommentNode(cmt)
+    df.appendChild(node)
+    return { ...cmt, node } as RunningComment
   })
-  if (comments.length) {
+  if (runningComments.length) {
     stage.appendChild(df)
   }
 
   const currentTime = this._.currentTime
   const duration = this._.duration
 
-  comments.forEach((cmt) => {
+  runningComments.forEach((cmt) => {
     cmt.width = cmt.width || cmt.node.offsetWidth
     cmt.height = cmt.height || cmt.node.offsetHeight
 
-    cmt._ = {
-      // 剩余时长
-      duration: duration - (currentTime - cmt.time),
-      // 全部时长
-      fullDuration: this._.duration,
-    }
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const isRTL = cmt.mode === 'rtl'
       const fullWidth = cmt.width + stage.width
@@ -79,7 +75,11 @@ export function setup(stage, comments) {
       if (isRTL) cmt.node.style.left = start + 'px'
       else cmt.node.style.right = end - offset + 'px'
 
-      Object.assign(cmt._, {
+      cmt._ = {
+        // 剩余时长
+        duration: duration - (currentTime - cmt.time),
+        // 全部时长
+        fullDuration: this._.duration,
         // 偏移量
         end: end - start,
         // 起始偏移时间
@@ -88,12 +88,16 @@ export function setup(stage, comments) {
         leftWidth: Math.abs(fullWidth - offset),
         // 全长
         fullWidth: fullWidth,
-      })
+      }
     }
   })
+  return runningComments
 }
 
-export function render({ cmt, pbr }) {
+export function render(
+  this: Danmaku,
+  { cmt, pbr }: { cmt: RunningComment; pbr: number }
+) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
     cmt.node.style.top = cmt.y + 'px'
 
@@ -111,14 +115,17 @@ export function render({ cmt, pbr }) {
   }
 }
 
-export function remove(stage, cmt) {
+export function remove(this: Danmaku, stage: Stage, cmt: RunningComment) {
   stage.removeChild(cmt.node)
-  if (!this.media) {
-    cmt.node = null
-  }
 }
 
-export function pause({ comments, currentTime }) {
+export function pause({
+  comments,
+  currentTime,
+}: {
+  comments: RunningComment[]
+  currentTime: number
+}) {
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const isRTL = cmt.mode === 'rtl'
@@ -133,7 +140,15 @@ export function pause({ comments, currentTime }) {
   })
 }
 
-export function play({ comments, pbr, currentTime }) {
+export function play({
+  comments,
+  pbr,
+  currentTime,
+}: {
+  comments: RunningComment[]
+  pbr: number
+  currentTime: number
+}) {
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       cmt.node.style.animationPlayState = ''

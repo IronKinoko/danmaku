@@ -3,38 +3,40 @@ import { bindEvents, unbindEvents } from './internal/events'
 import pause from './internal/pause'
 import play from './internal/play'
 import seek from './internal/seek'
-import { Comment, DanmakuOption } from './types'
+import type { InnerComment, DanmakuOption, InnerState, Comment } from './types'
 import {
   bindEngine,
   binsearch,
   caf,
-  formatMode,
   raf,
   resetSpace,
+  transComment,
 } from './utils'
 
 export default class Danmaku {
-  _: any = {
-    visible: true,
-    requestID: 0,
-    speed: 144,
-    duration: 4,
-    engine: bindEngine.call(this, domEngine),
-    rafIds: new Set(),
-    runningList: [],
-    position: 0,
-    paused: true,
-    opacity: 1,
-  }
   container: HTMLElement
   media?: HTMLMediaElement
-  comments: Comment[]
+  comments: InnerComment[]
+  protected _: InnerState
   constructor(opt: DanmakuOption) {
-    this._.speed = Math.max(0, opt.speed) || 144
+    if (!opt.container) throw new Error('container required')
+
+    this._ = {
+      visible: true,
+      requestID: 0,
+      speed: 144,
+      duration: 4,
+      engine: bindEngine.call(this, domEngine),
+      rafIds: new Set(),
+      runningList: [],
+      position: 0,
+      paused: true,
+      opacity: 1,
+    } as any
     this.container = opt.container
     this.media = opt.media
-    this.comments = (opt.comments || []).map((cmt) => ({ ...cmt }))
-    this.comments.sort((a, b) => a.time - b.time)
+    this.comments = transComment(opt.comments)
+    this._.speed = opt.speed ? Math.max(0, opt.speed) : 144
 
     Object.defineProperty(this._, 'currentTime', {
       get: () => {
@@ -48,13 +50,12 @@ export default class Danmaku {
     }
 
     this._.stage = this._.engine.init(this.container)
-    this._.stage.style.opacity = this._.opacity
+    this._.stage.style.opacity = this._.opacity + ''
 
     this.resize()
     this.container.appendChild(this._.stage)
 
-    this._.space = {}
-    resetSpace(this._.space)
+    this._.space = resetSpace({})
 
     if (!this.media || !this.media.paused) {
       seek.call(this)
@@ -81,7 +82,7 @@ export default class Danmaku {
     if (typeof s !== 'number' || isNaN(s)) return
     s = Math.min(Math.max(s, 0), 1)
     this._.opacity = s
-    this._.stage.style.opacity = s
+    this._.stage.style.opacity = s + ''
   }
 
   show() {
@@ -106,7 +107,7 @@ export default class Danmaku {
     return this
   }
 
-  reload(comments: Comment[]) {
+  reload(comments: InnerComment[]) {
     this.clear()
     this.comments = (comments || []).map((cmt) => ({ ...cmt }))
     this.comments.sort((a, b) => a.time - b.time)
@@ -152,9 +153,7 @@ export default class Danmaku {
   }
 
   emit(comment: Comment) {
-    const cmt = Object.assign({}, comment)
-    cmt.text = (cmt.text ?? '').toString()
-    cmt.mode = formatMode(cmt.mode)
+    const cmt: InnerComment = Object.assign({ mode: 'rtl' }, comment)
     if (this.media) {
       let position = 0
       if (cmt.time === undefined) {
@@ -175,20 +174,12 @@ export default class Danmaku {
   }
 
   destroy() {
-    if (!this.container) {
-      return this
-    }
-
     pause.call(this)
     this.clear()
-    this.container.removeChild(this._.stage)
+    this._.stage.parentElement?.removeChild(this._.stage)
+
     if (this.media) {
       unbindEvents.call(this, this._.listener)
-    }
-    for (const key in this) {
-      if (Object.prototype.hasOwnProperty.call(this, key)) {
-        this[key] = null
-      }
     }
     return this
   }
