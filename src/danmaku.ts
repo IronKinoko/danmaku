@@ -63,6 +63,10 @@ export default class Danmaku {
     }
   }
 
+  get stage() {
+    return this._.stage
+  }
+
   get speed() {
     return this._.speed
   }
