@@ -10,7 +10,7 @@
     "src",
     "types"
   ],
-  "types": "types/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "husky install",
     "dev": "vite",
