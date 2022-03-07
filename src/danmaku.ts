@@ -117,10 +117,9 @@ export default class Danmaku {
     return this
   }
 
-  reload(comments: InnerComment[]) {
+  reload(comments: Comment[]) {
     this.clear()
-    this.comments = (comments || []).map((cmt) => ({ ...cmt }))
-    this.comments.sort((a, b) => a.time - b.time)
+    this.comments = transComment(comments)
 
     seek.call(this)
     return this
