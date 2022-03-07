@@ -37,7 +37,7 @@ export default class Danmaku {
       runningList: [],
       position: 0,
       paused: true,
-      opacity: 1,
+      opacity: opt.opacity ?? 1,
     } as any
     this.container = opt.container
     this.media = opt.media
