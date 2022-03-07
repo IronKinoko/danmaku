@@ -3,7 +3,13 @@ import { bindEvents, unbindEvents } from './internal/events'
 import pause from './internal/pause'
 import play from './internal/play'
 import seek from './internal/seek'
-import type { InnerComment, DanmakuOption, InnerState, Comment } from './types'
+import type {
+  InnerComment,
+  DanmakuOption,
+  InnerState,
+  Comment,
+  EmitCommet,
+} from './types'
 import {
   bindEngine,
   binsearch,
@@ -156,8 +162,8 @@ export default class Danmaku {
     return this
   }
 
-  emit(comment: Comment) {
-    const cmt: InnerComment = Object.assign({ mode: 'rtl' }, comment)
+  emit(comment: EmitCommet) {
+    const cmt: InnerComment = Object.assign({ mode: 'rtl', time: 0 }, comment)
     if (this.media) {
       let position = 0
       if (cmt.time === undefined) {

@@ -1,4 +1,5 @@
 type RequiredPick<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>
+type PartialPick<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 export type Stage = HTMLDivElement & { width: number; height: number }
 
@@ -37,6 +38,7 @@ export type RunningState = {
     fullWidth: number
   }
 }
+export type EmitCommet = PartialPick<Comment, 'time'>
 export type InnerComment = RequiredPick<Comment, 'mode'>
 export type RunningComment = InnerComment & RunningState
 export type RunningCommentRange = RunningComment & { range: number }
