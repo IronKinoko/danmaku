@@ -15,7 +15,7 @@
     "prepare": "husky install",
     "dev": "vite",
     "build": "vite build && npm run dts",
-    "dts": "tsc",
+    "dts": "tsc -p tsconfig.build.json",
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage",
