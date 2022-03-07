@@ -2,6 +2,10 @@
 
 Danmaku is a JavaScript library to display flying comments on HTML media elements (video and audio). It can also display comments to your container in real time without timeline.
 
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/@ironkinoko/danmaku)
+![npm](https://img.shields.io/npm/v/@ironkinoko/danmaku)
+![jsDelivr hits (npm scoped)](https://img.shields.io/jsdelivr/npm/hm/@ironkinoko/danmaku)
+
 ## Installation
 
 You can install it with npm:
