@@ -65,7 +65,14 @@ export function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
     cmt.width = cmt.width || cmt.node.offsetWidth
     cmt.height = cmt.height || cmt.node.offsetHeight
 
-    if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
+    if (cmt.mode === 'top' || cmt.mode === 'bottom') {
+      cmt._ = {
+        // 剩余时长
+        duration: duration - (currentTime - cmt.time),
+        // 全部时长
+        fullDuration: this._.duration,
+      } as any
+    } else if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       const isRTL = cmt.mode === 'rtl'
       const fullWidth = cmt.width + stage.width
       const offset = ((currentTime - cmt.time) / duration) * fullWidth

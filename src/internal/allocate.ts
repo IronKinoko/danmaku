@@ -14,7 +14,6 @@ export default function (this: Danmaku, cmt: RunningComment) {
     if (cr.width > offset) {
       return true
     }
-
     // 从右往左，计算追尾时间
     //   cmtGoal   crGoal  screen                                    <--start
     // --|---------|-------|-------------------------------------------------
