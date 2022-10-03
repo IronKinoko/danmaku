@@ -2,7 +2,7 @@ import Danmaku from '../danmaku'
 import type { InnerComment, RunningComment, Stage } from '../types'
 import { raf } from '../utils'
 
-export function createCommentNode(cmt: InnerComment) {
+function createCommentNode(cmt: InnerComment) {
   const node = document.createElement('div')
   node.style.cssText = 'position:absolute;'
   if (typeof cmt.render === 'function') {
@@ -19,14 +19,14 @@ export function createCommentNode(cmt: InnerComment) {
   node.style.willChange = 'transform, opacity'
   node.className = 'danmaku'
 
-  node.textContent = cmt.text
+  node.textContent = cmt.text || ''
   if (cmt.style) {
     Object.assign(node.style, cmt.style)
   }
   return node
 }
 
-export function init() {
+function init() {
   const stage = document.createElement('div')
   stage.classList.add('danmaku-stage')
   stage.style.cssText =
@@ -34,7 +34,7 @@ export function init() {
   return stage
 }
 
-export function clear(stage: Stage) {
+function clear(stage: Stage) {
   let lc = stage.lastChild
   while (lc) {
     stage.removeChild(lc)
@@ -42,26 +42,46 @@ export function clear(stage: Stage) {
   }
 }
 
-export function resize(stage: Stage) {
+function resize(stage: Stage) {
   stage.style.width = stage.width + 'px'
   stage.style.height = stage.height + 'px'
 }
 
-export function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
+function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
   const df = document.createDocumentFragment()
-  const runningComments = comments.map((cmt) => {
-    const node = createCommentNode(cmt)
-    df.appendChild(node)
-    return { ...cmt, node } as RunningComment
-  })
-  if (runningComments.length) {
+  const pendingComments = comments.reduce<RunningComment[]>((arr, cmt) => {
+    let isMerged = false
+    if (this._.merge) {
+      const firstCmt = [...this._.runningList, ...arr].find((runningCmt) => {
+        if (cmt.render) return false
+        return runningCmt.text === cmt.text && runningCmt.mode === cmt.mode
+      })
+      if (firstCmt) {
+        isMerged = true
+        firstCmt.node.dataset.count =
+          parseInt(firstCmt.node.dataset.count || '1') + 1 + ''
+
+        firstCmt.node.textContent = `(${firstCmt.node.dataset.count})${firstCmt.text}`
+      }
+    }
+
+    if (!isMerged) {
+      const node = createCommentNode(cmt)
+      df.appendChild(node)
+      arr.push({ ...cmt, node } as RunningComment)
+    }
+
+    return arr
+  }, [])
+
+  if (pendingComments.length) {
     stage.appendChild(df)
   }
 
   const currentTime = this._.currentTime
   const duration = this._.duration
 
-  runningComments.forEach((cmt) => {
+  pendingComments.forEach((cmt) => {
     cmt.width = cmt.width || cmt.node.offsetWidth
     cmt.height = cmt.height || cmt.node.offsetHeight
 
@@ -98,10 +118,10 @@ export function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
       }
     }
   })
-  return runningComments
+  return pendingComments
 }
 
-export function render(
+function render(
   this: Danmaku,
   { cmt, pbr }: { cmt: RunningComment; pbr: number }
 ) {
@@ -122,11 +142,11 @@ export function render(
   }
 }
 
-export function remove(this: Danmaku, stage: Stage, cmt: RunningComment) {
+function remove(this: Danmaku, stage: Stage, cmt: RunningComment) {
   stage.removeChild(cmt.node)
 }
 
-export function pause({
+function pause({
   comments,
   currentTime,
 }: {
@@ -147,7 +167,7 @@ export function pause({
   })
 }
 
-export function play({
+function play({
   comments,
   pbr,
   currentTime,

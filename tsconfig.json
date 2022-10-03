@@ -4,8 +4,6 @@
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "skipLibCheck": true,
     "strict": true,
     "esModuleInterop": true,

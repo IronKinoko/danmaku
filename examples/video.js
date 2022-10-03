@@ -1,9 +1,12 @@
 import Danmaku from '../src/danmaku'
-import { genComment } from './genComment.js'
+import { genComment, random } from './genComment.js'
 
-function genComments() {
+function genComments(mergeMode) {
   return [...Array(9999)].map((_, i) => {
-    return genComment(i / 10)
+    let text = ''
+
+    if (mergeMode) text = ['a', 'b', 'c', 'd'][random(0, 3)]
+    return genComment(i / 10, text)
   })
 }
 
@@ -29,4 +32,10 @@ function genComments() {
     core.show()
   }
   $('#hide').onclick = () => core.hide()
+
+  $('#merge').onclick = () => {
+    core.merge = !core.merge
+
+    core.reload(genComments(core.merge))
+  }
 })()

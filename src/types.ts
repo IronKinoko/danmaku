@@ -5,7 +5,7 @@ export type Stage = HTMLDivElement & { width: number; height: number }
 
 export type Mode = 'ltr' | 'rtl' | 'top' | 'bottom'
 export interface Comment {
-  text: string
+  text?: string
   mode?: Mode
   /**
    * Specified in seconds. Not required in live mode.
@@ -64,6 +64,10 @@ export interface DanmakuOption {
    * The opacity of comments.
    */
   opacity?: number
+  /**
+   * Merge same comments
+   */
+  merge?: boolean
 }
 
 export interface InnerState {
@@ -80,5 +84,6 @@ export interface InnerState {
   paused: boolean
   opacity: number
   stage: Stage
+  merge?: boolean
   get currentTime(): number
 }

@@ -43,6 +43,7 @@ export default class Danmaku {
     this.media = opt.media
     this.comments = transComment(opt.comments)
     this._.speed = opt.speed ? Math.max(0, opt.speed) : 144
+    this._.merge = opt.merge || false
 
     Object.defineProperty(this._, 'currentTime', {
       get: () => {
@@ -67,6 +68,14 @@ export default class Danmaku {
       seek.call(this)
       play.call(this)
     }
+  }
+
+  get merge() {
+    return this._.merge
+  }
+  set merge(v) {
+    this._.merge = v
+    seek.call(this)
   }
 
   get stage() {

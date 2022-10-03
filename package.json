@@ -17,6 +17,7 @@
     "build": "vite build && npm run dts",
     "dts": "tsc -p tsconfig.build.json",
     "test": "jest",
+    "lint": "tsc --noEmit",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage",
     "prettier": "prettier -c -w {src,types}/**/*",
