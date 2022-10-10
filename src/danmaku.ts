@@ -44,6 +44,7 @@ export default class Danmaku {
     this.comments = transComment(opt.comments)
     this._.speed = opt.speed ? Math.max(0, opt.speed) : 144
     this._.merge = opt.merge || false
+    this._.overlap = opt.overlap || false
 
     Object.defineProperty(this._, 'currentTime', {
       get: () => {
@@ -68,6 +69,14 @@ export default class Danmaku {
       seek.call(this)
       play.call(this)
     }
+  }
+
+  get overlap() {
+    return this._.overlap
+  }
+  set overlap(v) {
+    this._.overlap = v
+    seek.call(this)
   }
 
   get merge() {

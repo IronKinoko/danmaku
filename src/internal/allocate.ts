@@ -65,6 +65,11 @@ export default function (this: Danmaku, cmt: RunningComment) {
     height: cmt.height,
     _: cmt._,
   } as RunningCommentRange
+
+  // cmt can't overlap, return false to remove cmt
+  if (!this._.overlap && channel > this.stage.height - cmt.height) return null
+
   crs.splice(last + 1, curr - last - 1, crObj)
-  return channel % (this._.stage.height - cmt.height)
+
+  return this._.overlap ? channel % (this._.stage.height - cmt.height) : channel
 }

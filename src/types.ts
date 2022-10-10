@@ -68,6 +68,8 @@ export interface DanmakuOption {
    * Merge same comments
    */
   merge?: boolean
+  /** Allow comments to overlap */
+  overlap?: boolean
 }
 
 export interface InnerState {
@@ -84,6 +86,7 @@ export interface InnerState {
   paused: boolean
   opacity: number
   stage: Stage
-  merge?: boolean
+  merge: boolean
+  overlap: boolean
   get currentTime(): number
 }

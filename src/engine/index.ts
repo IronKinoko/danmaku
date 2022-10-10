@@ -37,7 +37,12 @@ export default function (
     const runningComments = setup(this._.stage, pendingList)
 
     runningComments.forEach((cmt) => {
-      cmt.y = allocate.call(this, cmt)
+      const y = allocate.call(this, cmt)
+      if (y === null) {
+        remove(this._.stage, cmt)
+        return
+      }
+      cmt.y = y
       render({ cmt, pbr })
       this._.runningList.push(cmt)
     })

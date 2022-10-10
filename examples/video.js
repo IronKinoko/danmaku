@@ -6,7 +6,7 @@ function genComments(mergeMode) {
     let text = ''
 
     if (mergeMode) text = ['a', 'b', 'c', 'd'][random(0, 3)]
-    return genComment(i / 10, text)
+    return genComment(i / 30, text)
   })
 }
 
@@ -37,5 +37,9 @@ function genComments(mergeMode) {
     core.merge = !core.merge
 
     core.reload(genComments(core.merge))
+  }
+
+  $('#overlap').onclick = () => {
+    core.overlap = !core.overlap
   }
 })()
