@@ -83,3 +83,7 @@ export function bindEngine(this: Danmaku, engine: any) {
   }
   return ret
 }
+
+export function clamp(lower: number, number: number, upper: number) {
+  return Math.min(upper, Math.max(lower, number))
+}

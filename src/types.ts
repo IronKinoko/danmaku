@@ -66,10 +66,22 @@ export interface DanmakuOption {
   opacity?: number
   /**
    * Merge same comments
+   *
+   * @default false
    */
   merge?: boolean
-  /** Allow comments to overlap */
+  /**
+   * Allow comments to overlap
+   *
+   * @default false
+   */
   overlap?: boolean
+  /**
+   * rlt or ltr comment scroll area height percent of stage height 0~1
+   *
+   * @default 1
+   */
+  scrollAreaPercent?: number
 }
 
 export interface InnerState {
@@ -88,5 +100,6 @@ export interface InnerState {
   stage: Stage
   merge: boolean
   overlap: boolean
+  scrollAreaPercent: number
   get currentTime(): number
 }

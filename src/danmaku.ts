@@ -14,6 +14,7 @@ import {
   bindEngine,
   binsearch,
   caf,
+  clamp,
   raf,
   resetSpace,
   transComment,
@@ -30,7 +31,6 @@ export default class Danmaku {
     this._ = {
       visible: true,
       requestID: 0,
-      speed: 144,
       duration: 4,
       engine: bindEngine.call(this, domEngine),
       rafIds: new Set(),
@@ -38,13 +38,14 @@ export default class Danmaku {
       position: 0,
       paused: true,
       opacity: opt.opacity ?? 1,
+      overlap: opt.overlap ?? false,
+      merge: opt.merge ?? false,
+      scrollAreaPercent: clamp(0.25, opt.scrollAreaPercent || 1, 1),
+      speed: opt.speed ? Math.max(0, opt.speed) : 144,
     } as any
     this.container = opt.container
     this.media = opt.media
     this.comments = transComment(opt.comments)
-    this._.speed = opt.speed ? Math.max(0, opt.speed) : 144
-    this._.merge = opt.merge || false
-    this._.overlap = opt.overlap || false
 
     Object.defineProperty(this._, 'currentTime', {
       get: () => {
@@ -69,6 +70,14 @@ export default class Danmaku {
       seek.call(this)
       play.call(this)
     }
+  }
+
+  get scrollAreaPercent() {
+    return this._.scrollAreaPercent
+  }
+  set scrollAreaPercent(v) {
+    this._.scrollAreaPercent = clamp(0.25, v || 1, 1)
+    seek.call(this)
   }
 
   get overlap() {
