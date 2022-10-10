@@ -123,7 +123,7 @@ function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
 
 function render(
   this: Danmaku,
-  { cmt, pbr }: { cmt: RunningComment; pbr: number }
+  { cmt, playbackRate }: { cmt: RunningComment; playbackRate: number }
 ) {
   if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
     cmt.node.style.top = cmt.y + 'px'
@@ -131,7 +131,9 @@ function render(
     cmt.node.style.transform = `translateX(0)`
     const rafId = raf(() => {
       cmt.node.style.transform = `translateX(${cmt._.end}px)`
-      cmt.node.style.transition = `transform ${cmt._.duration / pbr}s linear`
+      cmt.node.style.transition = `transform ${
+        cmt._.duration / playbackRate
+      }s linear`
       this._.rafIds.delete(rafId)
     })
     this._.rafIds.add(rafId)
@@ -169,11 +171,11 @@ function pause({
 
 function play({
   comments,
-  pbr,
+  playbackRate,
   currentTime,
 }: {
   comments: RunningComment[]
-  pbr: number
+  playbackRate: number
   currentTime: number
 }) {
   comments.forEach((cmt) => {
@@ -181,7 +183,7 @@ function play({
       cmt.node.style.animationPlayState = ''
       cmt.node.style.transform = `translateX(${cmt._.end}px)`
       cmt.node.style.transition = `transform ${
-        (cmt._.duration - (currentTime - cmt._.currentTime)) / pbr
+        (cmt._.duration - (currentTime - cmt._.currentTime)) / playbackRate
       }s linear`
     }
   })

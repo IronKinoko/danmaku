@@ -160,7 +160,7 @@ export default class Danmaku {
       this._.engine.play({
         stage: this._.stage,
         comments: this._.runningList,
-        pbr: this.media ? this.media.playbackRate : 1,
+        playbackRate: this.media ? this.media.playbackRate : 1,
         currentTime: this._.currentTime,
         duration: this._.duration,
         rafIds: this._.rafIds,

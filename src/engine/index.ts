@@ -5,12 +5,12 @@ import type { RunningComment, Stage } from '../types'
 
 export default function (
   setup: (stage: Stage, comments: Comment[]) => RunningComment[],
-  render: (arg0: { cmt: RunningComment; pbr: number }) => void,
+  render: (arg0: { cmt: RunningComment; playbackRate: number }) => void,
   remove: (stage: Stage, cmt: RunningComment) => void
 ) {
   return function (this: Danmaku) {
     const currentTime = this._.currentTime
-    const pbr = this.media ? this.media.playbackRate : 1
+    const playbackRate = this.media ? this.media.playbackRate : 1
     for (let i = this._.runningList.length - 1; i >= 0; i--) {
       const cmt = this._.runningList[i]
       const cmtTime = cmt.time
@@ -43,7 +43,7 @@ export default function (
         return
       }
       cmt.y = y
-      render({ cmt, pbr })
+      render({ cmt, playbackRate })
       this._.runningList.push(cmt)
     })
   }
