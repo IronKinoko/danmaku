@@ -1,6 +1,6 @@
 {
   "name": "@ironkinoko/danmaku",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Display danmaku (flying comments) on HTML5 video.",
   "main": "dist/danmaku.umd.js",
   "module": "dist/danmaku.es.js",
