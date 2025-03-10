@@ -67,7 +67,7 @@ export default function (this: Danmaku, cmt: RunningComment) {
   } as RunningCommentRange
 
   let areaHeight = this._.stage.height - cmt.height
-  if (cmt.mode === 'ltr' || cmt.mode === 'rtl') {
+  if (cmt.mode === 'ltr' || cmt.mode === 'rtl' || cmt.mode==='top') {
     areaHeight = areaHeight * this._.scrollAreaPercent
   }
   // cmt can't overlap, return false to remove cmt
