@@ -14,6 +14,6 @@ export function genComment(time, text) {
       backgroundColor: color,
       opacity: 0.4,
     },
-    mode: ['rtl', 'top', 'bottom', 'ltr'][random(0, 6)],
+    mode: ['rtl', 'top', 'bottom', 'ltr'][random(0, 3)],
   }
 }
