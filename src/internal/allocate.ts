@@ -31,11 +31,14 @@ export default function (this: Danmaku, cmt: RunningComment) {
       (cmt._.fullWidth * cmtDuration) / cmt._.fullDuration - cmt.width
     const cmtSpeed = cmt._.fullWidth / cmt._.fullDuration
 
+    // 0.5s 间隔避免贴脸
+    const cmtGap = cmtSpeed / 2
     // cmt 速度大，且有差距时才会发生碰撞，
-    return cmtLeftWidth > crLeftWidth + crWidth
+    return cmtLeftWidth > crLeftWidth + crWidth + cmtGap
       ? cmtSpeed > crSpeed
         ? crDuration >
-          (cmtLeftWidth - (crLeftWidth + crWidth)) / (cmtSpeed - crSpeed)
+          (cmtLeftWidth - (crLeftWidth + crWidth + cmtGap)) /
+            (cmtSpeed - crSpeed)
         : false
       : true
   }
@@ -67,7 +70,7 @@ export default function (this: Danmaku, cmt: RunningComment) {
   } as RunningCommentRange
 
   let areaHeight = this._.stage.height - cmt.height
-  if (cmt.mode === 'ltr' || cmt.mode === 'rtl' || cmt.mode==='top') {
+  if (cmt.mode === 'ltr' || cmt.mode === 'rtl' || cmt.mode === 'top') {
     areaHeight = areaHeight * this._.scrollAreaPercent
   }
   // cmt can't overlap, return false to remove cmt
