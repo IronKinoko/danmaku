@@ -3,6 +3,12 @@ type PartialPick<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 export type Stage = HTMLDivElement & { width: number; height: number }
 
+import type { SimilarityConfig } from './engine/similarity'
+export type {
+  SimilarityConfig,
+  SimilarityReason,
+  SimilarityResult,
+} from './engine/similarity'
 export type Mode = 'ltr' | 'rtl' | 'top' | 'bottom'
 export interface Comment {
   text?: string
@@ -98,7 +104,7 @@ export interface InnerState {
   paused: boolean
   opacity: number
   stage: Stage
-  merge: boolean
+  merge: boolean | SimilarityConfig
   overlap: boolean
   scrollAreaPercent: number
   get currentTime(): number

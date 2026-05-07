@@ -2,6 +2,7 @@
   "extends": "./tsconfig.json",
   "exclude": ["test"],
   "compilerOptions": {
+    "rootDir": "./src",
     "declaration": true,
     "emitDeclarationOnly": true
   }

@@ -1,6 +1,7 @@
 import Danmaku from '../danmaku'
 import type { InnerComment, RunningComment, Stage } from '../types'
 import { clamp, raf } from '../utils'
+import { checkSimilarity } from './similarity'
 
 function createCommentNode(cmt: InnerComment) {
   const node = document.createElement('div')
@@ -54,7 +55,11 @@ function setup(this: Danmaku, stage: Stage, comments: InnerComment[]) {
     if (this._.merge) {
       const firstCmt = [...this._.runningList, ...arr].find((runningCmt) => {
         if (cmt.render) return false
-        return runningCmt.text === cmt.text && runningCmt.mode === cmt.mode
+        if (!runningCmt.text || !cmt.text) return false
+        return (
+          checkSimilarity(runningCmt.text, cmt.text).isSimilar &&
+          runningCmt.mode === cmt.mode
+        )
       })
       if (firstCmt) {
         isMerged = true
