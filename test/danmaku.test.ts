@@ -178,7 +178,7 @@ describe('Danmaku API', () => {
     expect(core.clear()).toBe(core)
     expect(core.state.runningList).toHaveLength(0)
     expect(core.state.nextExpiry).toBe(Infinity)
-    expect(core.stage.querySelector('.danmaku')).toBeNull()
+    expect(core.stage.querySelector('.k-danmaku')).toBeNull()
     expect(core.state.space.rtl).toHaveLength(2)
   })
 

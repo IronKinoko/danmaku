@@ -24,7 +24,7 @@ describe('CSS animation rendering', () => {
 
   const frame = () => vi.advanceTimersByTime(20)
   const nodes = () =>
-    Array.from(core.stage.querySelectorAll<HTMLDivElement>('.danmaku'))
+    Array.from(core.stage.querySelectorAll<HTMLDivElement>('.k-danmaku'))
 
   function start(comments: Comment[]) {
     core = new TestDanmaku({ container, media, comments, speed: 150 })
@@ -76,15 +76,15 @@ describe('CSS animation rendering', () => {
       { text: 'styled', time: 0, style: { fontSize: '25px' } },
     ])
     const [rtl, ltr, styled] = nodes()
-    const styles = document.getElementById('danmaku-styles-v2')
+    const styles = document.getElementById('k-danmaku-styles-v2')
     expect(styles?.parentElement).toBe(document.head)
     expect(styles?.textContent).toContain(
       'translateX(calc(var(--offset) + var(--translateX)))'
     )
     expect(styles?.textContent).toContain(
-      'animation: danmaku-scroll-v2 var(--duration) linear var(--delay) both'
+      'animation: k-danmaku-scroll-v2 var(--duration) linear var(--delay) both'
     )
-    expect(rtl.classList).toContain('danmaku--scrolling')
+    expect(rtl.classList).toContain('k-danmaku--scrolling')
     expect(rtl.style.getPropertyValue('--offset')).toBe('600px')
     expect(rtl.style.getPropertyValue('--translateX')).toBe('-700px')
     expect(rtl.style.getPropertyValue('--duration')).toBe('4s')
@@ -104,13 +104,13 @@ describe('CSS animation rendering', () => {
     currentTime = 2
     paused = true
     media.dispatchEvent(new Event('pause'))
-    expect(node.classList).toContain('danmaku--paused')
+    expect(node.classList).toContain('k-danmaku--paused')
 
     playbackRate = 2
     media.dispatchEvent(new Event('ratechange'))
     paused = false
     media.dispatchEvent(new Event('play'))
-    expect(node.classList).not.toContain('danmaku--paused')
+    expect(node.classList).not.toContain('k-danmaku--paused')
     expect(node.style.getPropertyValue('--duration')).toBe('2s')
     expect(node.style.getPropertyValue('--delay')).toBe('-1s')
 
@@ -138,7 +138,7 @@ describe('CSS animation rendering', () => {
     currentTime = 2
     media.dispatchEvent(new Event('seeking'))
     expect(nodes()).toHaveLength(0)
-    expect(document.getElementById('danmaku-styles-v2')).not.toBeNull()
+    expect(document.getElementById('k-danmaku-styles-v2')).not.toBeNull()
     expect(core.stage.querySelector('style')).toBeNull()
     frame()
     expect(nodes()[0].style.getPropertyValue('--delay')).toBe('-2s')
@@ -157,10 +157,10 @@ describe('CSS animation rendering', () => {
     ])
     const [top, bottom] = nodes()
     expect(top.firstElementChild?.tagName).toBe('SPAN')
-    expect(top.classList).toContain('danmaku--fixed')
-    expect(top.classList).toContain('danmaku--top')
+    expect(top.classList).toContain('k-danmaku--fixed')
+    expect(top.classList).toContain('k-danmaku--top')
     expect(top.style.getPropertyValue('--top')).toBe('0px')
-    expect(bottom.classList).toContain('danmaku--bottom')
+    expect(bottom.classList).toContain('k-danmaku--bottom')
     expect(bottom.style.getPropertyValue('--bottom')).toBe('0px')
     currentTime = 4.1
     frame()
@@ -182,7 +182,7 @@ describe('CSS animation rendering', () => {
     start([{ text: 'test', time: 0 }])
     core.hide()
     expect(nodes()).toHaveLength(0)
-    expect(document.getElementById('danmaku-styles-v2')).not.toBeNull()
+    expect(document.getElementById('k-danmaku-styles-v2')).not.toBeNull()
     expect(core.stage.querySelector('style')).toBeNull()
     currentTime = 2
     core.show()
@@ -195,10 +195,10 @@ describe('CSS animation rendering', () => {
     const node = nodes()[0]
     playbackRate = 0
     media.dispatchEvent(new Event('ratechange'))
-    expect(node.classList).toContain('danmaku--paused')
+    expect(node.classList).toContain('k-danmaku--paused')
     playbackRate = 1
     media.dispatchEvent(new Event('ratechange'))
-    expect(node.classList).not.toContain('danmaku--paused')
+    expect(node.classList).not.toContain('k-danmaku--paused')
   })
 
   it('renders and clears live comments', () => {
@@ -207,7 +207,7 @@ describe('CSS animation rendering', () => {
     frame()
     expect(nodes()).toHaveLength(1)
     expect(core.comments).toHaveLength(0)
-    expect(nodes()[0].classList).toContain('danmaku--scrolling')
+    expect(nodes()[0].classList).toContain('k-danmaku--scrolling')
     core.clear()
     core.emit({ text: 'next' })
     frame()

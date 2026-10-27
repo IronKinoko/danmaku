@@ -3,32 +3,32 @@ import type { InnerComment, RunningComment, Stage } from '../types'
 import { clamp } from '../utils'
 import { checkSimilarity } from './similarity'
 
-const stylesheetId = 'danmaku-styles-v2'
+const stylesheetId = 'k-danmaku-styles-v2'
 const stylesheet = `
-@keyframes danmaku-scroll-v2 {
+@keyframes k-danmaku-scroll-v2 {
   0% { transform: translateX(var(--offset)); }
   100% { transform: translateX(calc(var(--offset) + var(--translateX))); }
 }
-.danmaku-stage {
+.k-danmaku-stage {
   overflow: hidden;
   white-space: nowrap;
   transform: translateZ(0);
   position: relative;
   pointer-events: none;
 }
-.danmaku { position: absolute; }
-.danmaku--scrolling {
+.k-danmaku { position: absolute; }
+.k-danmaku--scrolling {
   left: 0;
   will-change: transform;
-  animation: danmaku-scroll-v2 var(--duration) linear var(--delay) both;
+  animation: k-danmaku-scroll-v2 var(--duration) linear var(--delay) both;
 }
-.danmaku--scrolling.danmaku--paused { animation-play-state: paused; }
-.danmaku--fixed {
+.k-danmaku--scrolling.k-danmaku--paused { animation-play-state: paused; }
+.k-danmaku--fixed {
   left: 50%;
   transform: translateX(-50%);
 }
-.danmaku--top { top: var(--top); }
-.danmaku--bottom { bottom: var(--bottom); }
+.k-danmaku--top { top: var(--top); }
+.k-danmaku--bottom { bottom: var(--bottom); }
 `
 
 function ensureStylesheet() {
@@ -56,14 +56,14 @@ function createCommentNode(cmt: InnerComment) {
       Object.assign(node.style, cmt.style)
     }
   }
-  node.className = 'danmaku'
+  node.className = 'k-danmaku'
   return node
 }
 
 function init() {
   ensureStylesheet()
   const stage = document.createElement('div')
-  stage.classList.add('danmaku-stage')
+  stage.classList.add('k-danmaku-stage')
   return stage
 }
 
@@ -148,7 +148,7 @@ function configureAnimation(
     '--delay',
     `${-Math.max(0, currentTime - cmt.time) / rate}s`
   )
-  cmt.node.classList.toggle('danmaku--paused', playbackRate <= 0)
+  cmt.node.classList.toggle('k-danmaku--paused', playbackRate <= 0)
 }
 
 function render(
@@ -164,11 +164,11 @@ function render(
       this._.currentTime,
       playbackRate
     )
-    cmt.node.classList.add('danmaku--scrolling')
+    cmt.node.classList.add('k-danmaku--scrolling')
   } else {
     cmt.node.classList.add(
-      'danmaku--fixed',
-      cmt.mode === 'top' ? 'danmaku--top' : 'danmaku--bottom'
+      'k-danmaku--fixed',
+      cmt.mode === 'top' ? 'k-danmaku--top' : 'k-danmaku--bottom'
     )
     cmt.node.style.setProperty(
       cmt.mode === 'top' ? '--top' : '--bottom',
@@ -184,7 +184,7 @@ function remove(this: Danmaku, stage: Stage, cmt: RunningComment) {
 function pause({ comments }: { comments: RunningComment[] }) {
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
-      cmt.node.classList.add('danmaku--paused')
+      cmt.node.classList.add('k-danmaku--paused')
     }
   })
 }
@@ -210,7 +210,7 @@ function play(
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
       hasScrollingComments = true
-      cmt.node.classList.remove('danmaku--scrolling')
+      cmt.node.classList.remove('k-danmaku--scrolling')
       configureAnimation(stage, cmt, duration, currentTime, playbackRate)
     } else {
       cmt._.fullDuration = clamp(4, duration, 9)
@@ -223,7 +223,7 @@ function play(
   void stage.offsetWidth
   comments.forEach((cmt) => {
     if (cmt.mode === 'rtl' || cmt.mode === 'ltr') {
-      cmt.node.classList.add('danmaku--scrolling')
+      cmt.node.classList.add('k-danmaku--scrolling')
     }
   })
 }
