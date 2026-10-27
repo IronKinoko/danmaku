@@ -106,6 +106,22 @@ Client:
 
 ## API
 
+### Rendering in 2.0
+
+Scrolling comments use linear CSS keyframe animations. The engine sets
+`--offset` (starting position), `--translateX` (travel distance), `--duration`
+and `--delay` on each scrolling comment. Media pauses, seeking, playback-rate
+changes, resizing and speed changes synchronize the animation with media time.
+The engine adds one shared stylesheet to `document.head`; per-comment inline
+styles contain only dynamic values. Applications with a Content Security
+Policy must allow these styles.
+
+The public API and the `style` and `render` comment options remain available.
+Fixed top and bottom comments remain centered and do not scroll.
+In live mode, `comments` contains only comments waiting to be processed;
+processed comments are removed to prevent unbounded memory growth. Applications
+that need a history should retain it separately.
+
 ### Initialization
 
 ```js

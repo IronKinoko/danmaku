@@ -32,15 +32,7 @@ export type RunningState = {
   height: number
   y: number
   _: {
-    duration: number
     fullDuration: number
-    // translateX end position
-    end: number
-    // 起始偏移时间
-    currentTime: number
-    // 剩余总长
-    leftWidth: number
-    // 全长
     fullWidth: number
   }
 }
@@ -98,8 +90,8 @@ export interface InnerState {
   speed: number
   duration: number
   engine: any
-  rafIds: Set<number>
   runningList: RunningComment[]
+  nextExpiry: number
   position: number
   paused: boolean
   opacity: number

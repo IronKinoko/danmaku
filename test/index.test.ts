@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import Danmaku, { Comment } from '../src'
 
 const comments: Comment[] = [
@@ -11,7 +12,7 @@ beforeEach(() => {
 describe('danmaku opts', () => {
   it('should throw error', () => {
     // @ts-ignore
-    expect(() => new Danmaku({ container: null })).toThrowError()
+    expect(() => new Danmaku({ container: null })).toThrow()
   })
 
   it('should have default opts', () => {
@@ -63,5 +64,7 @@ describe('danmaku opts', () => {
     expect(core.speed).toBe(110)
 
     expect(new Danmaku({ container, speed: 120 }).speed).toBe(120)
+    expect(new Danmaku({ container, speed: -1 }).speed).toBe(144)
+    expect(new Danmaku({ container, speed: Infinity }).speed).toBe(144)
   })
 })

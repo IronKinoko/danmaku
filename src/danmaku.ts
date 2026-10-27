@@ -10,15 +10,7 @@ import type {
   Comment,
   EmitCommet,
 } from './types'
-import {
-  bindEngine,
-  binsearch,
-  caf,
-  clamp,
-  raf,
-  resetSpace,
-  transComment,
-} from './utils'
+import { bindEngine, binsearch, clamp, resetSpace, transComment } from './utils'
 
 export default class Danmaku {
   container: HTMLElement
@@ -33,15 +25,20 @@ export default class Danmaku {
       requestID: 0,
       duration: 4,
       engine: bindEngine.call(this, domEngine),
-      rafIds: new Set(),
       runningList: [],
+      nextExpiry: Infinity,
       position: 0,
       paused: true,
       opacity: opt.opacity ?? 1,
       overlap: opt.overlap ?? false,
       merge: opt.merge ?? false,
       scrollAreaPercent: clamp(0.25, opt.scrollAreaPercent || 1, 1),
-      speed: opt.speed ? Math.max(0, opt.speed) : 144,
+      speed:
+        typeof opt.speed === 'number' &&
+        Number.isFinite(opt.speed) &&
+        opt.speed > 0
+          ? opt.speed
+          : 144,
     } as any
     this.container = opt.container
     this.media = opt.media
@@ -157,23 +154,12 @@ export default class Danmaku {
       return this
     }
 
-    this._.engine.pause({
+    this._.engine.play({
       stage: this._.stage,
       comments: this._.runningList,
+      playbackRate: this.media ? this.media.playbackRate : 1,
       currentTime: this._.currentTime,
-    })
-    this._.rafIds.forEach(caf)
-    this._.rafIds.clear()
-
-    raf(() => {
-      this._.engine.play({
-        stage: this._.stage,
-        comments: this._.runningList,
-        playbackRate: this.media ? this.media.playbackRate : 1,
-        currentTime: this._.currentTime,
-        duration: this._.duration,
-        rafIds: this._.rafIds,
-      })
+      duration: this._.duration,
     })
     return this
   }
@@ -189,11 +175,16 @@ export default class Danmaku {
   }
 
   emit(comment: EmitCommet) {
-    const cmt: InnerComment = Object.assign({ mode: 'rtl', time: 0 }, comment)
+    const cmt: InnerComment = {
+      ...comment,
+      mode: comment.mode ?? 'rtl',
+      time:
+        comment.time ??
+        (this.media ? this.media.currentTime : Date.now() / 1000),
+    }
     if (this.media) {
       let position = 0
-      if (cmt.time === undefined) {
-        cmt.time = this.media.currentTime
+      if (comment.time === undefined) {
         position = this._.position
       } else {
         position = binsearch(this.comments, 'time', cmt.time)
@@ -223,6 +214,8 @@ export default class Danmaku {
   clear() {
     this._.engine.clear(this._.stage, this._.runningList)
     this._.runningList = []
+    this._.nextExpiry = Infinity
+    resetSpace(this._.space)
     return this
   }
 }

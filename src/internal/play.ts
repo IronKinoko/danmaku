@@ -6,14 +6,8 @@ export default function (this: Danmaku) {
   if (!this._.visible || !this._.paused) {
     return this
   }
-  if (this.media) {
-    if (this._.paused) {
-      this._.paused = false
-      this.refresh()
-    }
-  }
-
   this._.paused = false
+  this.refresh()
 
   const engine = createEngine(
     this._.engine.setup,

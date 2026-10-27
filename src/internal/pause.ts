@@ -8,8 +8,6 @@ export default function (this: Danmaku) {
   this._.paused = true
   caf(this._.requestID)
   this._.requestID = 0
-  this._.rafIds.forEach(caf)
-  this._.rafIds.clear()
   this._.engine.pause({
     stage: this._.stage,
     comments: this._.runningList,

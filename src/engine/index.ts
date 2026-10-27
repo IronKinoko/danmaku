@@ -2,6 +2,7 @@ import { Comment } from '..'
 import Danmaku from '../danmaku'
 import allocate from '../internal/allocate'
 import type { RunningComment, Stage } from '../types'
+import { clamp } from '../utils'
 
 export default function (
   setup: (stage: Stage, comments: Comment[]) => RunningComment[],
@@ -10,14 +11,26 @@ export default function (
 ) {
   return function (this: Danmaku) {
     const currentTime = this._.currentTime
-    const playbackRate = this.media ? this.media.playbackRate : 1
-    for (let i = this._.runningList.length - 1; i >= 0; i--) {
-      const cmt = this._.runningList[i]
-      const cmtTime = cmt.time
-      if (currentTime - cmtTime > cmt._.fullDuration) {
-        remove(this._.stage, cmt)
-        this._.runningList.splice(i, 1)
+    if (currentTime >= this._.nextExpiry) {
+      let activeCount = 0
+      let nextExpiry = Infinity
+      for (const cmt of this._.runningList) {
+        const expiry = cmt.time + cmt._.fullDuration
+        if (currentTime - cmt.time > cmt._.fullDuration) {
+          remove(this._.stage, cmt)
+        } else {
+          this._.runningList[activeCount++] = cmt
+          nextExpiry = Math.min(nextExpiry, expiry)
+        }
       }
+      this._.runningList.length = activeCount
+      this._.nextExpiry = nextExpiry
+    }
+    if (
+      this._.position >= this.comments.length ||
+      this.comments[this._.position].time >= currentTime
+    ) {
+      return
     }
     const pendingList = []
     while (this._.position < this.comments.length) {
@@ -27,13 +40,23 @@ export default function (
         break
       }
 
-      if (currentTime - cmtTime > this._.duration) {
+      const duration =
+        cmt.mode === 'top' || cmt.mode === 'bottom'
+          ? clamp(4, this._.duration, 9)
+          : this._.duration
+      if (currentTime - cmtTime > duration || duration <= 0) {
         ++this._.position
         continue
       }
       pendingList.push(cmt)
       ++this._.position
     }
+    if (!this.media && this._.position > 0) {
+      this.comments.splice(0, this._.position)
+      this._.position = 0
+    }
+    if (pendingList.length === 0) return
+    const playbackRate = this.media ? this.media.playbackRate : 1
     const runningComments = setup(this._.stage, pendingList)
 
     runningComments.forEach((cmt) => {
@@ -45,6 +68,10 @@ export default function (
       cmt.y = y
       render({ cmt, playbackRate })
       this._.runningList.push(cmt)
+      this._.nextExpiry = Math.min(
+        this._.nextExpiry,
+        cmt.time + cmt._.fullDuration
+      )
     })
   }
 }
