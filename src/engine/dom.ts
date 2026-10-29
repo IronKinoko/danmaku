@@ -18,6 +18,7 @@ const stylesheet = `
 }
 .k-danmaku { position: absolute; }
 .k-danmaku--scrolling {
+  top: var(--top);
   left: 0;
   will-change: transform;
   animation: k-danmaku-scroll-v2 var(--duration) linear var(--delay) both;
